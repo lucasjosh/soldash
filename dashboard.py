@@ -10,7 +10,10 @@ COMMANDS = ['backup', 'fetchindex', 'enablepoll',
             'details', 'filelist', 'abortfetch']
 c = {}
 c['responseHeaders'] = {0: 'ok'}
-c['hosts'] = [{'hostname': 'localhost', 'port': 8983}]
+c['hosts'] = [{'hostname': 'localhost', 'port': 8983},
+              {'hostname': '33.33.33.5', 'port': 8983},
+              {'hostname': '33.33.33.10', 'port': 8983},
+              {'hostname': '33.33.33.11', 'port': 8983}]
 
 
 @app.route('/')

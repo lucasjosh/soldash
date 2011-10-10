@@ -1,11 +1,40 @@
-.instances td {
-	margin: 5px;
+/*
+colours:
+#1b1d26
+#425955
+#778c7a
+#f1f2d8
+#bfbd9f
+*/
+
+body {
+	background-color: #f1f2d8;
+}
+
+h1 {
+	color: 1b1d26;
+}
+
+h2,h3,h4,h5,h6 {
+	color: #425955;
+}
+
+.instances td, th {
+	border: 1px #1b1d26 solid;
+}
+
+.instances tr:nth-child(even) {
+	background-color: #f1f2d8;
+}
+
+.instances tr:nth-child(odd) {
+	background-color: #bfbd9f;
 }
 
 .critical {
-	background-color: red;
+	color: red;
 }
 
 .status.ok {
-	background-color: #6f0;
+	color: #6f0;
 }
