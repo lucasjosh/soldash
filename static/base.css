@@ -1,0 +1,11 @@
+.instances td {
+	margin: 5px;
+}
+
+.critical {
+	background-color: red;
+}
+
+.status.ok {
+	background-color: #6f0;
+}

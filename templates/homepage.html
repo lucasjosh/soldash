@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Solr Dashboard</title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='base.css') }}" />
+	</head>
+	<body>
+		<h1>Soldash</h1>
+		<h2>Current Solr Instances:</h2>
+		<table class="instances">
+			<tr>
+				<th>Host</th>
+				<th>Status</th>
+				<th>Type</th>
+				<th>Version</th>
+			</tr>
+			{% for host in c.hosts %}
+				<tr>
+					<td class="address">{{host.hostname}}:{{host.port}}</td>
+					{% if host.details %}
+						<td class="status {{c.responseHeaders[host.details.responseHeader.status]}}">
+							{{c.responseHeaders[host.details.responseHeader.status]}}
+						</td>
+						<td class="type">{{ 'M' if host.details.details.isMaster else 'S' }}</td>
+						<td class="version">{{host.details.details.indexVersion}}</td>
+					{% else %}
+						<td class="status critical">DOWN</td>
+					{% endif %}
+				</tr>
+			{% endfor %}
+		</table>
+	</body>
+</html>
