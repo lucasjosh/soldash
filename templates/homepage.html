@@ -14,15 +14,11 @@
 				<th>Type</th>
 				<th>Version</th>
 				<th>Generation</th>
-				<th>Fetch Index</th>
-				<th>Abort Fetch</th>
-				<th>Enable Polling</th>
-				<th>Disable Polling</th>
-				<th>Enable Replication</th>
-				<th>Disable Replication</th>
-				<th>Filelist</th>
-				<th>Backup</th>
-				
+				{% for command in c.commands %}
+					{% if command.title %}
+						<th>{{command.title}}</th>
+					{% endif %}
+				{% endfor %}
 			</tr>
 			{% for host in c.hosts %}
 				<tr>
@@ -34,18 +30,14 @@
 						<td class="type">{{ 'M' if host.details.details.isMaster else 'S' }}</td>
 						<td class="version">{{host.details.details.indexVersion}}</td>
 						<td class="generation">{{host.details.details.generation}}</td>
-						<td class="fetchindex"></td>
-						<td class="abortfetch"></td>
-						<td class="enablepoll"></td>
-						<td class="disablepoll"></td>
-						<td class="enablereplication"></td>
-						<td class="disablereplication"></td>
-						<td class="filelist"></td>
-						<td class="backup"></td>
+						{% for command in c.commands %}
+							{% if command.title %}
+								<td class="{{command.command}}"></th>
+							{% endif %}
+						{% endfor %}
 					{% else %}
 						<td class="status critical">DOWN</td>
 					{% endif %}
-					{{host}}
 				</tr>
 			{% endfor %}
 		</table>
