@@ -3,25 +3,9 @@ import simplejson
 
 from flask import Flask, render_template
 
+from settings import c
 
 app = Flask(__name__)
-c = {}
-c['responseHeaders'] = {0: 'ok'}
-c['hosts'] = [{'hostname': 'localhost', 'port': 8983},
-              {'hostname': '33.33.33.5', 'port': 8983},
-              {'hostname': '33.33.33.10', 'port': 8983},
-              {'hostname': '33.33.33.11', 'port': 8983}]
-c['commands'] = [
-                {'command': 'fetchindex', 'title': 'Fetch Index'},
-                {'command': 'abortfetch', 'title': 'Abort Fetch'},
-                {'command': 'enablepoll', 'title': 'Enable Polling'},
-                {'command': 'disablepoll', 'title': 'Disable Polling'}, 
-                {'command': 'enablereplication', 'title': 'Enable Replication'}, 
-                {'command': 'disablereplication', 'title': 'Disable Replication'},
-                {'command': 'details', 'title': False}, 
-                {'command': 'filelist', 'title': 'File List'},
-                {'command': 'backup', 'title': 'Backup'} 
-            ]
 
 @app.route('/')
 def homepage():
@@ -33,11 +17,11 @@ def initialise():
         host['details'] = query_solr(host['hostname'], host['port'], 
                                      'details')
 
-def query_solr(host, port, command, vals=None):
+def query_solr(host, port, command, params=None):
     url = 'http://%s:%s/solr/replication?command=%s&wt=json' % (host, port, command)
-    if vals:
-        for key in vals:
-            url += '&%s=%s' % (key, vals[key])
+    if params:
+        for key in params:
+            url += '&%s=%s' % (key, params[key])
     try:
         conn = urllib2.urlopen(url)
     except urllib2.URLError:
