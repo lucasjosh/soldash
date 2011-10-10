@@ -22,7 +22,9 @@
 			</tr>
 			{% for host in c.hosts %}
 				<tr>
-					<td class="address">{{host.hostname}}:{{host.port}}</td>
+					<td class="address">
+						<a href="http://{{host.hostname}}:{{host.port}}/solr/admin">{{host.hostname}}:{{host.port}}</a>
+					</td>
 					{% if host.details %}
 						<td class="status {{c.responseHeaders[host.details.responseHeader.status]}}">
 							{{c.responseHeaders[host.details.responseHeader.status]}}
