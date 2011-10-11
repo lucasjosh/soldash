@@ -32,7 +32,12 @@ def execute(command):
 
 def initialise():
     for host in c['hosts']:
-        host['details'] = query_solr(host, 'details')
+        details = query_solr(host, 'details')
+        if details['status'] == 'ok':
+            host['details'] = details['data']
+        elif details['status'] == 'error':
+            host['details'] = None
+            host['error'] = details['data']
 
 def parse_address(address):
     return address.split('%3A')
@@ -54,9 +59,16 @@ def query_solr(host, command, params=None):
         urllib2.install_opener(opener)
     try:
         conn = urllib2.urlopen(url)
-    except urllib2.URLError:
-        return False
-    return simplejson.load(conn)
+        retval = {'status': 'ok', 
+                  'data': simplejson.load(conn)}
+    except urllib2.HTTPError, e:
+        retval = {'status': 'error',
+                'data': 'auth'}
+    except urllib2.URLError, e:
+        retval = {'status': 'error', 
+                'data': 'down'}
+    print str(retval)
+    return retval
 
 if __name__ == '__main__':
     app.run(debug=True)

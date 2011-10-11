@@ -50,7 +50,7 @@
 							{% endif %}
 						{% endfor %}
 					{% else %}
-						<td class="status critical">Down</td>
+						<td class="status critical">{{host.error}}</td>
 					{% endif %}
 				</tr>
 			{% endfor %}
