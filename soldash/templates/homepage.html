@@ -29,12 +29,13 @@
 						<a href="http://{{host.hostname}}:{{host.port}}/solr/admin">{{host.hostname}}:{{host.port}}</a>
 					</td>
 					{% if host.details %}
+						{% set det = host.details.details %}
 						<td class="status {{c.responseHeaders[host.details.responseHeader.status]}}">
 							{{c.responseHeaders[host.details.responseHeader.status]}}
 						</td>
-						<td class="type">{{ 'M' if host.details.details.isMaster else 'S' }}</td>
-						<td class="version">{{host.details.details.indexVersion}}</td>
-						<td class="generation">{{host.details.details.generation}}</td>
+						<td class="type">{{ 'M' if det.isMaster else 'S' }}</td>
+						<td class="version">{{det.indexVersion}}</td>
+						<td class="generation">{{det.generation}}</td>
 						{% for command in c.commands %}
 							{% if command.title %}
 							    {% set element_id = [host.hostname.replace('.','_'),host.port,command.command]|join('_') %}
