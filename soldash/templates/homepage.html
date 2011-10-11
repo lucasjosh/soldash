@@ -37,6 +37,7 @@
 						<td class="generation">{{host.details.details.generation}}</td>
 						{% for command in c.commands %}
 							{% if command.title %}
+							    {% set element_id = [host.hostname.replace('.','_'),host.port,command.command]|join('_') %}
 								<td class="{{command.command}}">
 									<a href="javascript:command_click('{{command.command}}', 
 																		{
@@ -44,8 +45,8 @@
 																		 port: '{{host.port}}',
 																		 auth: {{host.auth}}
 																		}, 
-																		'#{{host.hostname}}_{{host.port}}_{{command.command}}')">
-										<div class="executebutton ready" id="{{host.hostname}}_{{host.port}}_{{command.command}}"> </div>
+																		'#{{element_id}}')">
+										<div class="executebutton ready" id="{{element_id}}"> </div>
 									</a>
 								</th>
 							{% endif %}
