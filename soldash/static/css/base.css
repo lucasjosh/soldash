@@ -45,12 +45,20 @@ h2,h3,h4,h5,h6 {
 	color: #6f0;
 }
 
+.executebutton {
+	min-height: 22px;
+	max-width: 22px;
+	margin: 0 auto;
+}
 .executebutton.ready {
-	
+	background-image: url("/static/images/ready.png");
 }
 .executebutton.success {
-	
+	background-image: url("/static/images/success.png");
 }
 .executebutton.error {
-	
+	background-image: url("/static/images/error.png");
+}
+.executebutton.working {
+	background-image: url("/static/images/working.gif");
 }
