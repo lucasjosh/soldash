@@ -6,6 +6,7 @@ c['hosts'] = [
                  {'hostname': '33.33.33.11', 'port': 8983},
                  {'hostname': '33.33.33.12', 'port': 8983}
              ]
+c['indexes'] = []
 c['commands'] = [
                     {'command': 'fetchindex', 'title': 'Fetch Index'},
                     {'command': 'abortfetch', 'title': 'Abort Fetch'},

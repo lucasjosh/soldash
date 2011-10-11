@@ -2,7 +2,7 @@ import urllib
 import urllib2
 import simplejson
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 
 from settings import c
 
@@ -13,15 +13,14 @@ def homepage():
     initialise()
     return render_template('homepage.html', c=c)
 
-@app.route('/execute/<command>/<address>')
-def execute(command, address):
-    host, port = parse_address(address)
-    return str(query_solr(host, port, command))
+@app.route('/execute/<command>', methods=['GET'])
+def execute(command):
+    host = request.args.get('host','')
+    port = request.args.get('port','')
+    return jsonify(query_solr(host, port, command))
 
 def initialise():
     for host in c['hosts']:
-        host['quoted'] = urllib.quote(':'.join([host['hostname'], 
-                                               str(host['port'])]))
         host['details'] = query_solr(host['hostname'], host['port'], 
                                      'details')
 
