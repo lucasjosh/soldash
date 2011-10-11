@@ -19,11 +19,9 @@ def execute(command):
     port = request.form['port']
     auth = {}
     try:
-        username = request.form['username']
-        password = request.form['password']
-        auth = {'username': username,
-                'password': password}
-    except KeyError:
+        auth = {'username': request.form['username'],
+                'password': request.form['password']}
+    except KeyError, e:
         pass
     host = {'hostname': hostname,
             'port': port,
@@ -67,7 +65,6 @@ def query_solr(host, command, params=None):
     except urllib2.URLError, e:
         retval = {'status': 'error', 
                 'data': 'down'}
-    print str(retval)
     return retval
 
 if __name__ == '__main__':

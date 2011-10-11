@@ -15,7 +15,7 @@ function command_click(command, host, element_id) {
 }
 
 function handleResponse(command, data, status, host, element_id) {
-	console.log('changing icon ' + element_id);
+	console.log(data);
 	if(data['data']['status'] == 'ERROR') {
 		changeIcon(element_id, "error");
 		setStatusBar(data['data']['message'], 'error', 5);
