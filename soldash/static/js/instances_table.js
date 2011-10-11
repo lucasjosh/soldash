@@ -1,4 +1,10 @@
 function command_click(command, host, element_id) {
+	/**
+	 * command: solr command to be executed
+	 * host: of the form 
+	 *   {hostname: 'localhost', port: 8888, auth: {username: 'abc', password: 'def'}}
+	 * element_id: id of the element that was clicked to trigger this function
+	 */
 	changeIcon(element_id, "working");
 	var auth = '';
 	if(! $.isEmptyObject(host['auth'])) {
@@ -15,7 +21,14 @@ function command_click(command, host, element_id) {
 }
 
 function handleResponse(command, data, status, host, element_id) {
-	console.log(data);
+	/**
+	 * command: same as in command_click()
+	 * data: jsonified response from server
+	 * status: whether the call itself could be made to the solr server
+	 *   (status being 'ok' doesn't preclude data['status'] from being 'ERROR')
+	 * host: same as in command_click()
+	 * element_id: same as in command_click() 
+	 */
 	if(data['data']['status'] == 'ERROR') {
 		changeIcon(element_id, "error");
 		setStatusBar(data['data']['message'], 'error', 5);
@@ -42,13 +55,11 @@ function setStatusBar(text, css, hide_seconds) {
 	}, hide_seconds * 1000);
 }
 
-function hideStatusBar() {
-	var bar = $('#statusbar');
-	bar.addClass('hidden');
-	bar.html('');
-}
-
 function changeIcon(element_id, new_icon) {
+	/**
+	 * element_id: id of the element that was clicked to trigger this function 
+	 * new_icon: a css class to be added to change the icon
+	 */
 	$(element_id).removeClass("ready success error working");
 	$(element_id).addClass(new_icon);
 }
