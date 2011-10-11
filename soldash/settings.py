@@ -1,10 +1,18 @@
 c = {}
 c['responseHeaders'] = {0: 'ok'}
 c['hosts'] = [
-                 {'hostname': 'localhost', 'port': 8983},
-                 {'hostname': '33.33.33.10', 'port': 8983},
-                 {'hostname': '33.33.33.11', 'port': 8983},
-                 {'hostname': '33.33.33.12', 'port': 8983}
+                 {'hostname': 'localhost', 
+                  'port': 8983, 
+                  'auth': {}},
+                 {'hostname': '33.33.33.10', 
+                  'port': 8983,
+                  'auth': {'username': 'test', 'password': 'test'}},
+                 {'hostname': '33.33.33.11', 
+                  'port': 8983,
+                  'auth': {'username': 'test', 'password': 'test'}},
+                 {'hostname': '33.33.33.12', 
+                  'port': 8983,
+                  'auth': {'username': 'test', 'password': 'test'}}
              ]
 c['indexes'] = []
 c['commands'] = [

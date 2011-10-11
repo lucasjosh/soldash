@@ -1,16 +1,20 @@
-function command_click(command, solr_host, solr_port, element_id) {
+function command_click(command, host, element_id) {
 	changeIcon(element_id, "working");
+	var auth = '';
+	if(! $.isEmptyObject(host['auth'])) {
+		auth = "&username=" + host['auth']['username'] + "&password=" + host['auth']['password'];
+	}
 	$.ajax({
 	  url: "/execute/" + command,
-	  type: "GET",
-	  data: "host=" + solr_host + "&port=" + solr_port,
+	  type: "POST",
+	  data: "host=" + host['hostname'] + "&port=" + host['port'] + auth,
 	  success: function(data, status, jqXHR){
-		handleResponse(command, data, status, solr_host, solr_port, element_id);
+		handleResponse(command, data, status, host, element_id);
 		}
 	});
 }
 
-function handleResponse(command, data, status, solr_host, solr_port, element_id) {
+function handleResponse(command, data, status, host, element_id) {
 	console.log(data);
 	if(data['status'] == 'ERROR') {
 		changeIcon(element_id, "error");

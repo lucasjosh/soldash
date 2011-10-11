@@ -37,7 +37,13 @@
 						{% for command in c.commands %}
 							{% if command.title %}
 								<td class="{{command.command}}">
-									<a href="javascript:command_click('{{command.command}}', '{{host.hostname}}', '{{host.port}}', '#{{host.hostname}}_{{host.port}}_{{command.command}}')">
+									<a href="javascript:command_click('{{command.command}}', 
+																		{
+																		 hostname: '{{host.hostname}}',
+																		 port: '{{host.port}}',
+																		 auth: {{host.auth}}
+																		}, 
+																		'#{{host.hostname}}_{{host.port}}_{{command.command}}')">
 										<div class="executebutton ready" id="{{host.hostname}}_{{host.port}}_{{command.command}}"> </div>
 									</a>
 								</th>
