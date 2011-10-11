@@ -16,9 +16,9 @@ function command_click(command, host, element_id) {
 
 function handleResponse(command, data, status, host, element_id) {
 	console.log(data);
-	if(data['status'] == 'ERROR') {
+	if(data['data']['status'] == 'ERROR') {
 		changeIcon(element_id, "error");
-	} else if(data['status'] == 'OK') {
+	} else if(data['data']['status'] == 'OK') {
 		changeIcon(element_id, "success");
 	}
 }
