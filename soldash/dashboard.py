@@ -1,3 +1,4 @@
+import urllib
 import urllib2
 import simplejson
 
@@ -12,10 +13,20 @@ def homepage():
     initialise()
     return render_template('homepage.html', c=c)
 
+@app.route('/execute/<command>/<address>')
+def execute(command, address):
+    host, port = parse_address(address)
+    return str(query_solr(host, port, command))
+
 def initialise():
     for host in c['hosts']:
+        host['quoted'] = urllib.quote(':'.join([host['hostname'], 
+                                               str(host['port'])]))
         host['details'] = query_solr(host['hostname'], host['port'], 
                                      'details')
+
+def parse_address(address):
+    return address.split('%3A')
 
 def query_solr(host, port, command, params=None):
     url = 'http://%s:%s/solr/replication?command=%s&wt=json' % (host, port, command)

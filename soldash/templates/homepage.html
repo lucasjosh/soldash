@@ -34,7 +34,9 @@
 						<td class="generation">{{host.details.details.generation}}</td>
 						{% for command in c.commands %}
 							{% if command.title %}
-								<td class="{{command.command}}"></th>
+								<td class="{{command.command}}">
+									<a href="{{ url_for('execute', command=command.command, address=host.quoted) }}">Click</a>
+								</th>
 							{% endif %}
 						{% endfor %}
 					{% else %}
