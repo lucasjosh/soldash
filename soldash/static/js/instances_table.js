@@ -15,12 +15,36 @@ function command_click(command, host, element_id) {
 }
 
 function handleResponse(command, data, status, host, element_id) {
-	console.log(data);
 	if(data['data']['status'] == 'ERROR') {
 		changeIcon(element_id, "error");
+		setStatusBar(data['data']['message'], 'error', 5);
 	} else if(data['data']['status'] == 'OK') {
 		changeIcon(element_id, "success");
+		setStatusBar('Success!', 'success', 2);
 	}
+}
+
+function setStatusBar(text, css, hide_seconds) {
+	/**
+	 * text: the status bar's html content
+	 * css: a css class to add
+	 * hide_seconds: hide the statusbar after n seconds
+	 * 
+	 */
+	var bar = $('#statusbar');
+	bar.removeAttr("style");
+	bar.removeClass('hidden success error');
+	bar.addClass(css);
+	bar.html(text);
+	setTimeout(function() {
+	    bar.fadeOut('slow');
+	}, hide_seconds * 1000);
+}
+
+function hideStatusBar() {
+	var bar = $('#statusbar');
+	bar.addClass('hidden');
+	bar.html('');
 }
 
 function changeIcon(element_id, new_icon) {
