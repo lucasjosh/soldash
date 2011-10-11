@@ -1,0 +1,4 @@
+Soldash is a small web application that provides an overview of multiple Solr instances. It is currently in the
+pre-alpha stage. 
+
+It aims to be a fully functional dashboard, providing full control over your Solr architecture. 
