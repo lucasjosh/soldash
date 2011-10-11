@@ -33,6 +33,10 @@ h2,h3,h4,h5,h6 {
 	background-color: #bfbd9f;
 }
 
+.status {
+	text-transform: uppercase;
+}
+
 .critical {
 	color: red;
 }
