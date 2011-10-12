@@ -31,6 +31,9 @@ def execute(command):
 def initialise():
     for host in c['hosts']:
         details = query_solr(host, 'details')
+        print '****'
+        print str(details)
+        print '****'
         if details['status'] == 'ok':
             host['details'] = details['data']
         elif details['status'] == 'error':

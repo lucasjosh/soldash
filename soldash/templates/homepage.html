@@ -33,7 +33,7 @@
 						<td class="status {{c.responseHeaders[host.details.responseHeader.status]}}">
 							{{c.responseHeaders[host.details.responseHeader.status]}}
 						</td>
-						<td class="type">{{ 'M' if det.isMaster else 'S' }}</td>
+						<td class="type">{{ 'M' if det.isMaster == 'true' else 'S' }}</td>
 						<td class="version">{{det.indexVersion}}</td>
 						<td class="generation">{{det.generation}}</td>
 						{% for command in c.commands %}
