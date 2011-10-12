@@ -18,15 +18,25 @@ def execute(command):
     hostname = request.form['host']
     port = request.form['port']
     auth = {}
+    params = {}
     try:
         auth = {'username': request.form['username'],
                 'password': request.form['password']}
     except KeyError, e:
         pass
+    try:
+        params = {'indexversion': request.form['indexversion']}
+    except KeyError, e:
+        pass
     host = {'hostname': hostname,
             'port': port,
             'auth': auth}
-    return jsonify(query_solr(host, command))
+    return jsonify(query_solr(host, command, params=params))
+
+@app.route('/refresh', methods=['GET'])
+def refresh():
+    initialise()
+    return jsonify(c)
 
 def initialise():
     for host in c['hosts']:
@@ -62,6 +72,7 @@ def query_solr(host, command, params=None):
     except urllib2.URLError, e:
         retval = {'status': 'error', 
                 'data': 'down'}
+    print str(retval)
     return retval
 
 if __name__ == '__main__':

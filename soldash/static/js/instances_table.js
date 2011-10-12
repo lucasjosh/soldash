@@ -11,20 +11,24 @@ function command_click(command, host, element_id) {
 	 */
 	changeIcon(element_id, 'working');
 	var auth = '';
+	var params = ''
 	if(! $.isEmptyObject(host['auth'])) {
 		auth = '&username=' + host['auth']['username'] + '&password=' + host['auth']['password'];
+	}
+	if(command === 'filelist') {
+		params += '&indexversion=' + getIndexVersionFromElementID(element_id);
 	}
 	$.ajax({
 	  url: '/execute/' + command,
 	  type: 'POST',
-	  data: 'host=' + host['hostname'] + '&port=' + host['port'] + auth,
+	  data: 'host=' + host['hostname'] + '&port=' + host['port'] + auth + params,
 	  success: function(data, status, jqXHR){
-		handleResponse(command, data, status, host, element_id);
+		handleCommandResponse(command, data, status, host, element_id);
 		}
 	});
 }
 
-function handleResponse(command, data, status, host, element_id) {
+function handleCommandResponse(command, data, status, host, element_id) {
 	/**
 	 * command: same as in command_click()
 	 * data: jsonified response from server
@@ -33,11 +37,17 @@ function handleResponse(command, data, status, host, element_id) {
 	 * host: same as in command_click()
 	 * element_id: same as in command_click() 
 	 */
-	console.log(data);
+	
 	if(data['data']['status'] == 'ERROR') {
 		changeIcon(element_id, 'error');
 		setStatusBar(data['data']['message'], 'error', 5);
 	} else if(data['data']['status'] == 'OK') {
+		changeIcon(element_id, 'success');
+		setStatusBar('Success!', 'success', 2);
+	} else if(data['data']['status'] == 'no indexversion specified') {
+		changeIcon(element_id, 'error');
+		setStatusBar(data['data']['status'], 'error', 5);
+	} else if(command === 'filelist' && data['data']['filelist']) {
 		changeIcon(element_id, 'success');
 		setStatusBar('Success!', 'success', 2);
 	}
@@ -128,7 +138,7 @@ function getIndexVersion(row_id) {
 	return $('#' + row_id).children('.version').text();
 }
 function getIndexVersionFromElementID(element_id) {
-	return getIndexVersion(getRowID($(element_id)))
+	return getIndexVersion(getRowID($('#' + element_id)))
 }
 
 /**
