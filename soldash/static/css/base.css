@@ -48,6 +48,9 @@ h2,h3,h4,h5,h6 {
 .status.ok {
 	color: #6f0;
 }
+.version.out_of_sync {
+	background-color: #e33229;
+}
 
 #statusbar {
 	position: fixed;

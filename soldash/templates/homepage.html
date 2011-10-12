@@ -6,7 +6,7 @@
 		<script src="{{ url_for('static', filename='js/jquery-1.6.4.min.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/instances_table.js') }}"></script>
 	</head>
-	<body>
+	<body onload="initialise();">
 		<div class="hidden" id="statusbar"></div>
 		<h1>Soldash</h1>
 		<h2>Current Solr Instances:</h2>
@@ -24,7 +24,8 @@
 				{% endfor %}
 			</tr>
 			{% for host in c.hosts %}
-				<tr>
+				{% set row_id = [host.hostname.replace('.','_'),host.port]|join('_') %}
+				<tr id="{{row_id}}">
 					<td class="address">
 						<a href="http://{{host.hostname}}:{{host.port}}/solr/admin">{{host.hostname}}:{{host.port}}</a>
 					</td>
@@ -33,7 +34,9 @@
 						<td class="status {{c.responseHeaders[host.details.responseHeader.status]}}">
 							{{c.responseHeaders[host.details.responseHeader.status]}}
 						</td>
-						<td class="type">{{ 'M' if det.isMaster == 'true' else 'S' }}</td>
+						<td class="type {{ 'master' if det.isMaster == 'true' else 'slave' }}">
+							{{ 'M' if det.isMaster == 'true' else 'S' }}
+						</td>
 						<td class="version">{{det.indexVersion}}</td>
 						<td class="generation">{{det.generation}}</td>
 						{% for command in c.commands %}
@@ -46,7 +49,7 @@
 																		 port: '{{host.port}}',
 																		 auth: {{host.auth}}
 																		}, 
-																		'#{{element_id}}')">
+																		'{{element_id}}')">
 										<div class="executebutton ready" id="{{element_id}}"> </div>
 									</a>
 								</th>
