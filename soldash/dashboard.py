@@ -37,9 +37,6 @@ def initialise():
             host['details'] = None
             host['error'] = details['data']
 
-def parse_address(address):
-    return address.split('%3A')
-
 def query_solr(host, command, params=None):
     url = 'http://%s:%s/solr/replication?command=%s&wt=json' % (host['hostname'], 
                                                                 host['port'], 
