@@ -74,7 +74,6 @@ def query_solr(host, command, params=None):
     except urllib2.URLError, e:
         retval = {'status': 'error', 
                 'data': 'down'}
-    print str(retval)
     return retval
 
 if __name__ == '__main__':

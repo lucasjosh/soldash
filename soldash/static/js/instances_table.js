@@ -37,7 +37,7 @@ function handleCommandResponse(command, data, status, host, element_id) {
 	 * host: same as in command_click()
 	 * element_id: same as in command_click() 
 	 */
-	
+	console.log(data);
 	if(data['data']['status'] == 'ERROR') {
 		changeIcon(element_id, 'error');
 		setStatusBar(data['data']['message'], 'error', 5);
