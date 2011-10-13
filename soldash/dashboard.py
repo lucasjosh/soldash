@@ -11,13 +11,16 @@ app = Flask(__name__)
 
 @app.route('/')
 def homepage():
-    initialise()
-    return render_template('homepage.html', c=c)
+    indexes = initialise()
+    return render_template('homepage.html', indexes=indexes, c=c)
 
 @app.route('/execute/<command>', methods=['POST'])
 def execute(command):
     hostname = request.form['host']
     port = request.form['port']
+    index = request.form['index']
+    if index == 'null':
+        index = None
     auth = {}
     params = {}
     try:
@@ -32,7 +35,7 @@ def execute(command):
     host = {'hostname': hostname,
             'port': port,
             'auth': auth}
-    return jsonify(query_solr(host, command, params=params))
+    return jsonify(query_solr(host, command, index, params=params))
 
 @app.route('/refresh', methods=['GET'])
 def refresh():
@@ -40,19 +43,31 @@ def refresh():
     return jsonify(c)
 
 def initialise():
-    for host in c['hosts']:
-        details = query_solr(host, 'details')
-        if details['status'] == 'ok':
-            host['details'] = details['data']
-        elif details['status'] == 'error':
-            host['details'] = None
-            host['error'] = details['data']
+    retval = {}
+    for index in c['indexes']:
+        retval[index] = []
+        for host in c['hosts']:
+            details = query_solr(host, 'details', index)
+            if details['status'] == 'ok':
+                host['details'] = details['data']
+            elif details['status'] == 'error':
+                host['details'] = None
+                host['error'] = details['data']
+            retval[index].append(host)
+    return retval
 
-def query_solr(host, command, params=None):
+def query_solr(host, command, index, params=None):
     socket.setdefaulttimeout(2)
-    url = 'http://%s:%s/solr/replication?command=%s&wt=json' % (host['hostname'], 
-                                                                host['port'], 
-                                                                command)
+    if index:
+        url = 'http://%s:%s/solr/%s/replication?command=%s&wt=json' % (host['hostname'], 
+                                                                       host['port'], 
+                                                                       index,
+                                                                       command)
+    else:
+        url = 'http://%s:%s/solr/replication?command=%s&wt=json' % (host['hostname'], 
+                                                                    host['port'], 
+                                                                    command)
+        
     if params:
         for key in params:
             url += '&%s=%s' % (key, params[key])
@@ -70,10 +85,11 @@ def query_solr(host, command, params=None):
                   'data': simplejson.load(conn)}
     except urllib2.HTTPError, e:
         retval = {'status': 'error',
-                'data': 'auth'}
+                  'data': 'auth'}
     except urllib2.URLError, e:
         retval = {'status': 'error', 
-                'data': 'down'}
+                  'data': 'down'}
+    print str(retval)
     return retval
 
 if __name__ == '__main__':

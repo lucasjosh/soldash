@@ -14,7 +14,9 @@ c['hosts'] = [
                   'port': 8983,
                   'auth': {'username': 'test', 'password': 'test'}}
              ]
-c['indexes'] = []
+c['indexes'] = {
+                None: []
+               }
 c['commands'] = [
                     {'command': 'fetchindex', 'title': 'Fetch Index'},
                     {'command': 'abortfetch', 'title': 'Abort Fetch'},

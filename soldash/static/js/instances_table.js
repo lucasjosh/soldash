@@ -1,12 +1,15 @@
 function initialise() {
-	compareSlaveVersionsWithMaster();
+	var instances_tables = $('.instances');
+	for(var i=0; i<instances_tables.length; i++) {
+		compareSlaveVersionsWithMaster(instances_tables[i].id);
+	}
 }
 
 function command_click(command, host, element_id) {
 	/**
 	 * command: solr command to be executed
 	 * host: of the form 
-	 *   {hostname: 'localhost', port: 8888, auth: {username: 'abc', password: 'def'}}
+	 *   {hostname: 'localhost', port: 8888, auth: {username: 'abc', password: 'def'}, index: 'indexname'}
 	 * element_id: id of the element that was clicked to trigger this function
 	 */
 	changeIcon(element_id, 'working');
@@ -18,10 +21,11 @@ function command_click(command, host, element_id) {
 	if(command === 'filelist') {
 		params += '&indexversion=' + getIndexVersionFromElementID(element_id);
 	}
+	console.log(host);
 	$.ajax({
 	  url: '/execute/' + command,
 	  type: 'POST',
-	  data: 'host=' + host['hostname'] + '&port=' + host['port'] + auth + params,
+	  data: 'host=' + host['hostname'] + '&port=' + host['port'] + '&index=' + host['index'] + auth + params,
 	  success: function(data, status, jqXHR){
 		handleCommandResponse(command, data, status, host, element_id);
 		}
@@ -37,7 +41,6 @@ function handleCommandResponse(command, data, status, host, element_id) {
 	 * host: same as in command_click()
 	 * element_id: same as in command_click() 
 	 */
-	console.log(data);
 	if(data['data']['status'] == 'ERROR') {
 		changeIcon(element_id, 'error');
 		setStatusBar(data['data']['message'], 'error', 5);
@@ -83,8 +86,9 @@ function changeIcon(element_id, new_icon) {
  * Functions for IndexVersion checking and comparisons. 
  * 
  */
-function compareSlaveVersionsWithMaster() {
-	var master = getMasterVersion();
+function compareSlaveVersionsWithMaster(table_id) {
+	var table = $('#' + table_id);
+	var master = getMasterVersion(table);
 	if(!master) {
 		return false;
 	}
@@ -97,10 +101,11 @@ function compareSlaveVersionsWithMaster() {
 	}
 }
 
-function getMasterVersion() {
-	var masters = $('.master');
+function getMasterVersion(table) {
+	var masters = table.find('.master');
+	var table_name = $(table).attr('id').replace('instances_','');
 	if(masters.length < 1) {
-		alert('No masters online.');
+		alert('No masters online for index ' + table_name);
 		return false;
 	}
 	var retval = areAllVersionsEqual(masters);
@@ -111,17 +116,17 @@ function getMasterVersion() {
 }
 
 function areAllVersionsEqual(cells) {
-	var master_indexes = [];
+	var index_versions = [];
 	for(var i=0; i<cells.length; i++) {
 		var row_id = getRowID(cells[i]);
-		master_indexes.push(getIndexVersion(row_id));
+		index_versions.push(getIndexVersion(row_id));
 	}
 	var last_entry; 
-	for(var i=0; i<master_indexes.length; i++) {
+	for(var i=0; i<index_versions.length; i++) {
 		if (i==0) {
-			last_entry = master_indexes[i];
+			last_entry = index_versions[i];
 		} else {
-			if(master_indexes[i] !== last_entry) {
+			if(index_versions[i] !== last_entry) {
 				return false;
 			}
 		}
@@ -138,7 +143,7 @@ function getIndexVersion(row_id) {
 	return $('#' + row_id).children('.version').text();
 }
 function getIndexVersionFromElementID(element_id) {
-	return getIndexVersion(getRowID($('#' + element_id)))
+	return getIndexVersion(getRowID($('#' + element_id)));
 }
 
 /**

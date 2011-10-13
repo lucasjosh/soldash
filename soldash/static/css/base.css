@@ -21,8 +21,13 @@ a {
 	color: #1b1d26;
 }
 
-h2,h3,h4,h5,h6 {
+h2,h4,h5,h6 {
 	color: #425955;
+}
+
+h3 {
+	color: #773027;
+	margin-bottom: 0;
 }
 
 .instances td, th {
