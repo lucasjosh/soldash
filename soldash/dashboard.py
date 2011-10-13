@@ -1,6 +1,7 @@
 import urllib
 import urllib2
 import simplejson
+import socket
 
 from flask import Flask, render_template, request, jsonify
 
@@ -48,6 +49,7 @@ def initialise():
             host['error'] = details['data']
 
 def query_solr(host, command, params=None):
+    socket.setdefaulttimeout(2)
     url = 'http://%s:%s/solr/replication?command=%s&wt=json' % (host['hostname'], 
                                                                 host['port'], 
                                                                 command)
