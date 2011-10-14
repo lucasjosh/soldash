@@ -45,8 +45,8 @@ def restart(hostname, port):
     fabric.env.host_string = hostname
     fabric.env.user = SSH_USERNAME
     fabric.env.password = SSH_USERNAME
-    x = fabric.sudo('/etc/rc2.d/S18solr restart')
-    return jsonify({'result': x})
+    retval = fabric.sudo('/etc/rc2.d/S18solr restart')
+    return jsonify({'result': retval})
 
 def initialise():
     retval = {}
