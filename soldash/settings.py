@@ -1,6 +1,4 @@
-c = {}
-c['responseHeaders'] = {0: 'ok'}
-c['hosts'] = [
+HOSTS = [
                  {'hostname': 'localhost', 
                   'port': 8983, 
                   'auth': {}},
@@ -14,9 +12,10 @@ c['hosts'] = [
                   'port': 8983,
                   'auth': {'username': 'test', 'password': 'test'}}
              ]
-c['indexes'] = {
-                None: []
-               }
+INDEXES = [None, 'asdf']
+
+c = {}
+c['responseHeaders'] = {0: 'ok'}
 c['commands'] = [
                     {'command': 'fetchindex', 'title': 'Fetch Index'},
                     {'command': 'abortfetch', 'title': 'Abort Fetch'},

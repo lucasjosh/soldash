@@ -105,7 +105,11 @@ function getMasterVersion(table) {
 	var masters = table.find('.master');
 	var table_name = $(table).attr('id').replace('instances_','');
 	if(masters.length < 1) {
-		alert('No masters online for index ' + table_name);
+		if(table_name === 'None') {
+			alert('No masters online for the default index.')
+		} else {
+			alert('No masters online for index ' + table_name);
+		}
 		return false;
 	}
 	var retval = areAllVersionsEqual(masters);

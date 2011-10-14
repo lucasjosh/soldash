@@ -1,3 +1,4 @@
+import copy
 import urllib
 import urllib2
 import simplejson
@@ -5,7 +6,7 @@ import socket
 
 from flask import Flask, render_template, request, jsonify
 
-from settings import c
+from settings import c, HOSTS, INDEXES
 
 app = Flask(__name__)
 
@@ -37,23 +38,17 @@ def execute(command):
             'auth': auth}
     return jsonify(query_solr(host, command, index, params=params))
 
-@app.route('/refresh', methods=['GET'])
-def refresh():
-    initialise()
-    return jsonify(c)
-
 def initialise():
     retval = {}
-    for index in c['indexes']:
-        retval[index] = []
-        for host in c['hosts']:
+    for index in INDEXES:
+        retval[index] = copy.deepcopy(HOSTS)
+        for host in retval[index]:
             details = query_solr(host, 'details', index)
             if details['status'] == 'ok':
                 host['details'] = details['data']
             elif details['status'] == 'error':
                 host['details'] = None
                 host['error'] = details['data']
-            retval[index].append(host)
     return retval
 
 def query_solr(host, command, index, params=None):
@@ -67,7 +62,6 @@ def query_solr(host, command, index, params=None):
         url = 'http://%s:%s/solr/replication?command=%s&wt=json' % (host['hostname'], 
                                                                     host['port'], 
                                                                     command)
-        
     if params:
         for key in params:
             url += '&%s=%s' % (key, params[key])
@@ -85,11 +79,10 @@ def query_solr(host, command, index, params=None):
                   'data': simplejson.load(conn)}
     except urllib2.HTTPError, e:
         retval = {'status': 'error',
-                  'data': 'auth'}
+                  'data': 'conf'}
     except urllib2.URLError, e:
         retval = {'status': 'error', 
                   'data': 'down'}
-    print str(retval)
     return retval
 
 if __name__ == '__main__':
