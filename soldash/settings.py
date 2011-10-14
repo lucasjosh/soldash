@@ -12,7 +12,10 @@ HOSTS = [
                   'port': 8983,
                   'auth': {'username': 'test', 'password': 'test'}}
              ]
-INDEXES = [None, 'asdf']
+INDEXES = [None]
+
+SSH_USERNAME = 'vagrant'
+SSH_PASSWORD = 'vagrant'
 
 c = {}
 c['responseHeaders'] = {0: 'ok'}
@@ -25,5 +28,6 @@ c['commands'] = [
                     {'command': 'disablereplication', 'title': 'Disable Replication'},
                     {'command': 'details', 'title': False}, 
                     {'command': 'filelist', 'title': 'File List'},
-                    {'command': 'backup', 'title': 'Backup'} 
+                    {'command': 'backup', 'title': 'Backup'},
+                    {'command': 'restart', 'title': 'Restart Solr'}
                 ]
