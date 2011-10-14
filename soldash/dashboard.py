@@ -4,7 +4,6 @@ import urllib2
 import simplejson
 import socket
 import fabric.api as fabric
-from fabric.context_managers import settings as _settings
 
 from flask import Flask, render_template, request, jsonify
 
