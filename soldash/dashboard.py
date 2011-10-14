@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def homepage():
-    indexes = initialise()
+    indexes = _initialise()
     return render_template('homepage.html', indexes=indexes, c=c)
 
 @app.route('/execute/<command>', methods=['POST'])
@@ -22,7 +22,7 @@ def execute(command):
     port = request.form['port']
     index = request.form['index']
     if command == 'restart':
-        return restart(hostname, port)
+        return _restart(hostname, port)
     if index == 'null':
         index = None
     auth = {}
@@ -39,21 +39,21 @@ def execute(command):
     host = {'hostname': hostname,
             'port': port,
             'auth': auth}
-    return jsonify(query_solr(host, command, index, params=params))
+    return jsonify(_query_solr(host, command, index, params=params))
 
-def restart(hostname, port):
+def _restart(hostname, port):
     fabric.env.host_string = hostname
     fabric.env.user = SSH_USERNAME
     fabric.env.password = SSH_USERNAME
     retval = fabric.sudo('/etc/rc2.d/S18solr restart')
     return jsonify({'result': retval})
 
-def initialise():
+def _initialise():
     retval = {}
     for index in INDEXES:
         retval[index] = copy.deepcopy(HOSTS)
         for host in retval[index]:
-            details = query_solr(host, 'details', index)
+            details = _query_solr(host, 'details', index)
             if details['status'] == 'ok':
                 host['details'] = details['data']
             elif details['status'] == 'error':
@@ -61,7 +61,7 @@ def initialise():
                 host['error'] = details['data']
     return retval
 
-def query_solr(host, command, index, params=None):
+def _query_solr(host, command, index, params=None):
     socket.setdefaulttimeout(2)
     if index:
         url = 'http://%s:%s/solr/%s/replication?command=%s&wt=json' % (host['hostname'], 
