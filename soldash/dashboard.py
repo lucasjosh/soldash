@@ -4,6 +4,10 @@ import urllib2
 import simplejson
 import socket
 import fabric.api as fabric
+<<<<<<< HEAD
+=======
+from fabric.context_managers import settings as _settings
+>>>>>>> 7c740600239dff0273a36afc20419813834fee42
 
 from flask import Flask, render_template, request, jsonify
 
@@ -45,8 +49,13 @@ def restart(hostname, port):
     fabric.env.host_string = hostname
     fabric.env.user = SSH_USERNAME
     fabric.env.password = SSH_USERNAME
+<<<<<<< HEAD
     retval = fabric.sudo('/etc/rc2.d/S18solr restart')
     return jsonify({'result': retval})
+=======
+    x = fabric.sudo('/etc/rc2.d/S18solr restart')
+    return jsonify({'result': x})
+>>>>>>> 7c740600239dff0273a36afc20419813834fee42
 
 def initialise():
     retval = {}
