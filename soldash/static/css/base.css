@@ -87,3 +87,6 @@ h3 {
 .executebutton.working {
 	background-image: url("/static/images/working.gif");
 }
+.restart .executebutton {
+	background-image: url("/static/images/restart.png");
+}

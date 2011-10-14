@@ -21,7 +21,6 @@ function command_click(command, host, element_id) {
 	if(command === 'filelist') {
 		params += '&indexversion=' + getIndexVersionFromElementID(element_id);
 	}
-	console.log(host);
 	$.ajax({
 	  url: '/execute/' + command,
 	  type: 'POST',

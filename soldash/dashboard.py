@@ -3,10 +3,12 @@ import urllib
 import urllib2
 import simplejson
 import socket
+import fabric.api as fabric
+from fabric.context_managers import settings as _settings
 
 from flask import Flask, render_template, request, jsonify
 
-from settings import c, HOSTS, INDEXES
+from settings import c, HOSTS, INDEXES, SSH_USERNAME, SSH_PASSWORD
 
 app = Flask(__name__)
 
@@ -20,6 +22,8 @@ def execute(command):
     hostname = request.form['host']
     port = request.form['port']
     index = request.form['index']
+    if command == 'restart':
+        return restart(hostname, port)
     if index == 'null':
         index = None
     auth = {}
@@ -37,6 +41,13 @@ def execute(command):
             'port': port,
             'auth': auth}
     return jsonify(query_solr(host, command, index, params=params))
+
+def restart(hostname, port):
+    fabric.env.host_string = hostname
+    fabric.env.user = SSH_USERNAME
+    fabric.env.password = SSH_USERNAME
+    x = fabric.sudo('/etc/rc2.d/S18solr restart')
+    return jsonify({'result': x})
 
 def initialise():
     retval = {}
