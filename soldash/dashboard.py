@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def homepage():
-    indexes = _initialise()
+    indexes = _get_details()
     return render_template('homepage.html', indexes=indexes, c=c)
 
 @app.route('/execute/<command>', methods=['POST'])
@@ -44,11 +44,11 @@ def execute(command):
 def _restart(hostname, port):
     fabric.env.host_string = hostname
     fabric.env.user = SSH_USERNAME
-    fabric.env.password = SSH_USERNAME
-    retval = fabric.sudo('/etc/rc2.d/S18solr restart')
+    fabric.env.password = SSH_PASSWORD
+    retval = fabric.sudo('/etc/init.d/solr restart')
     return jsonify({'result': retval})
 
-def _initialise():
+def _get_details():
     retval = {}
     for index in INDEXES:
         retval[index] = copy.deepcopy(HOSTS)
