@@ -16,6 +16,8 @@ INDEXES = [None]
 
 SSH_USERNAME = 'vagrant'
 
+TIMEOUT = 2
+
 c = {}
 c['responseHeaders'] = {0: 'ok'}
 c['commands'] = [

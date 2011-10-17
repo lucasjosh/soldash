@@ -7,7 +7,7 @@ import fabric.api as fabric
 
 from flask import Flask, render_template, request, jsonify
 
-from settings import c, HOSTS, INDEXES, SSH_USERNAME
+from settings import c, HOSTS, INDEXES, SSH_USERNAME, TIMEOUT
 
 app = Flask(__name__)
 
@@ -63,7 +63,7 @@ def _get_details():
     return retval
 
 def _query_solr(host, command, index, params=None):
-    socket.setdefaulttimeout(2)
+    socket.setdefaulttimeout(TIMEOUT)
     if index:
         url = 'http://%s:%s/solr/%s/replication?command=%s&wt=json' % (host['hostname'], 
                                                                        host['port'], 
