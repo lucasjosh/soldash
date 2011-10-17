@@ -13,22 +13,32 @@ function command_click(command, host, element_id) {
 	 * element_id: id of the element that was clicked to trigger this function
 	 */
 	changeIcon(element_id, 'working');
-	var auth = '';
-	var params = ''
-	if(! $.isEmptyObject(host['auth'])) {
-		auth = '&username=' + host['auth']['username'] + '&password=' + host['auth']['password'];
-	}
-	if(command === 'filelist') {
-		params += '&indexversion=' + getIndexVersionFromElementID(element_id);
-	}
+	data = getSupportingData(command, host, element_id);
 	$.ajax({
 	  url: '/execute/' + command,
 	  type: 'POST',
-	  data: 'host=' + host['hostname'] + '&port=' + host['port'] + '&index=' + host['index'] + auth + params,
+	  data: data,
 	  success: function(data, status, jqXHR){
 		handleCommandResponse(command, data, status, host, element_id);
 		}
 	});
+}
+
+function getSupportingData(command, host, element_id) {
+	/**
+	 * Extract extra data to be sent in the POST request.
+	 */
+	var retval = 'host=' + host['hostname'] + '&port=' + host['port'] + '&index=' + host['index'];
+	if(! $.isEmptyObject(host['auth'])) {
+		retval += '&username=' + host['auth']['username'] + '&password=' + host['auth']['password'];
+	}
+	if(command === 'filelist') {
+		retval += '&indexversion=' + getIndexVersionFromElementID(element_id);
+	} else if (command === 'restart') {
+		var password = window.prompt("Please enter SSH password to restart Solr:","");
+		retval += '&ssh_password=' + password;
+	}
+	return retval;
 }
 
 function handleCommandResponse(command, data, status, host, element_id) {

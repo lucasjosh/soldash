@@ -7,7 +7,7 @@ import fabric.api as fabric
 
 from flask import Flask, render_template, request, jsonify
 
-from settings import c, HOSTS, INDEXES, SSH_USERNAME, SSH_PASSWORD
+from settings import c, HOSTS, INDEXES, SSH_USERNAME
 
 app = Flask(__name__)
 
@@ -22,7 +22,8 @@ def execute(command):
     port = request.form['port']
     index = request.form['index']
     if command == 'restart':
-        return _restart(hostname, port)
+        password = request.form.get('ssh_password','')
+        return _restart(hostname, port, password)
     if index == 'null':
         index = None
     auth = {}
@@ -41,10 +42,10 @@ def execute(command):
             'auth': auth}
     return jsonify(_query_solr(host, command, index, params=params))
 
-def _restart(hostname, port):
+def _restart(hostname, port, password):
     fabric.env.host_string = hostname
     fabric.env.user = SSH_USERNAME
-    fabric.env.password = SSH_PASSWORD
+    fabric.env.password = password
     retval = fabric.sudo('/etc/init.d/solr restart')
     return jsonify({'result': retval})
 

@@ -15,7 +15,6 @@ HOSTS = [
 INDEXES = [None]
 
 SSH_USERNAME = 'vagrant'
-SSH_PASSWORD = 'vagrant'
 
 c = {}
 c['responseHeaders'] = {0: 'ok'}
