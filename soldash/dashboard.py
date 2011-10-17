@@ -42,6 +42,10 @@ def execute(command):
             'auth': auth}
     return jsonify(_query_solr(host, command, index, params=params))
 
+@app.route('/details', methods=['GET'])
+def details():
+    return jsonify(_get_details())
+
 def _restart(hostname, port, password):
     fabric.env.host_string = hostname
     fabric.env.user = SSH_USERNAME

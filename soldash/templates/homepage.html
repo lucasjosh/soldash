@@ -32,7 +32,7 @@
 					{% endfor %}
 				</tr>
 				{% for host in indexes[index] %}
-					{% set row_id = [index,host.hostname.replace('.','_'),host.port]|join('_') %}
+					{% set row_id = [index,host.hostname.replace('.','_'),host.port]|join('-') %}
 					<tr id="{{row_id}}">
 						<td class="address">
 							<a href="http://{{host.hostname}}:{{host.port}}/solr/admin">{{host.hostname}}:{{host.port}}</a>
@@ -49,7 +49,7 @@
 							<td class="generation">{{det.generation}}</td>
 							{% for command in c.commands %}
 								{% if command.title %}
-								    {% set element_id = [index,host.hostname.replace('.','_'),host.port,command.command]|join('_') %}
+								    {% set element_id = [index,host.hostname.replace('.','_'),host.port,command.command]|join('-') %}
 									<td class="{{command.command}}">
 										<a href="javascript:command_click('{{command.command}}', 
 																			{
