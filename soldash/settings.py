@@ -21,9 +21,12 @@ TIMEOUT = 2
 c = {}
 c['responseHeaders'] = {0: 'ok'}
 c['commands'] = [
-                    {'command': 'fetchindex', 'title': 'Fetch Index', 'reverse': 'abortfetch'},
-                    {'command': 'enablepoll', 'title': 'Enable Polling', 'reverse': 'disablepoll'},
-                    {'command': 'enablereplication', 'title': 'Enable Replication', 'reverse': 'disablereplication'}, 
+                    {'command': 'fetchindex', 'title': 'Fetch Index'},
+                    {'command': 'abortfetch', 'title': 'Abort Fetch'},
+                    {'command': 'enablepoll', 'title': 'Enable Polling'},
+                    {'command': 'disablepoll', 'title': 'Disable Polling'}, 
+                    {'command': 'enablereplication', 'title': 'Enable Replication'}, 
+                    {'command': 'disablereplication', 'title': 'Disable Replication'},
                     {'command': 'details', 'title': False}, 
                     {'command': 'filelist', 'title': 'File List'},
                     {'command': 'backup', 'title': 'Backup'},
