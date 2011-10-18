@@ -8,85 +8,91 @@ colours:
 */
 
 .hidden {
-	display: none;
+    display: none;
 }
 
 body {
-	background-color: #f1f2d8;
-	font-family: Helvetica, Arial, sans-serif;
-	color: #1b1d26;
+    background-color: #f1f2d8;
+    font-family: Helvetica, Arial, sans-serif;
+    color: #1b1d26;
 }
 
 a {
-	color: #1b1d26;
+    color: #1b1d26;
 }
 
 h2,h4,h5,h6 {
-	color: #425955;
+    color: #425955;
 }
 
 h3 {
-	color: #773027;
-	margin-bottom: 0;
+    color: #773027;
+    margin-bottom: 0;
 }
 
 .instances td, th {
-	border: 1px #1b1d26 solid;
+    border: 1px #1b1d26 solid;
 }
 .instances tr:nth-child(even) {
-	background-color: #f1f2d8;
+    background-color: #f1f2d8;
 }
 .instances tr:nth-child(odd) {
-	background-color: #bfbd9f;
+    background-color: #bfbd9f;
 }
 
 .status {
-	text-transform: uppercase;
-	font-weight: bold;
+    text-transform: uppercase;
+    font-weight: bold;
 }
 .status, .type, .generation {
-	text-align: center;
+    text-align: center;
 }
 .critical {
-	color: red;
+    color: red;
 }
 .status.ok {
-	color: #6f0;
+    color: #6f0;
 }
 .version.out_of_sync {
-	background-color: #e33229;
+    background-color: #e33229;
 }
 
 #statusbar {
-	position: fixed;
-	top: 3px;
-	left: 50%;
-	width: 400px;
-	text-align: center;
-	margin-left: -200px;
-	background-color: #bfbd9f;
-	padding: 5px 10px;
-	font-size: 13px;
-	font-weight: bold;
+    position: fixed;
+    top: 3px;
+    left: 50%;
+    width: 400px;
+    text-align: center;
+    margin-left: -200px;
+    background-color: #bfbd9f;
+    padding: 5px 10px;
+    font-size: 13px;
+    font-weight: bold;
 }
 
 .executebutton {
-	min-height: 22px;
-	max-width: 22px;
-	margin: 0 auto;
+    min-height: 22px;
+    max-width: 22px;
+    margin: 0 auto;
+}
+.executebutton.enabled {
+    background-image: url("/static/images/enabled.png");
+}
+.executebutton.disabled {
+    background-image: url("/static/images/disabled.png");
 }
 .executebutton.ready {
-	background-image: url("/static/images/ready.png");
+    background-image: url("/static/images/ready.png");
 }
 .executebutton.success {
-	background-image: url("/static/images/success.png");
+    background-image: url("/static/images/success.png");
 }
 .executebutton.error {
-	background-image: url("/static/images/error.png");
+    background-image: url("/static/images/error.png");
 }
 .executebutton.working {
-	background-image: url("/static/images/working.gif");
+    background-image: url("/static/images/working.gif");
 }
 .restart .executebutton {
-	background-image: url("/static/images/restart.png");
+    background-image: url("/static/images/restart.png");
 }

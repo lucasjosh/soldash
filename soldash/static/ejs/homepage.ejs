@@ -1,0 +1,66 @@
+<div class="hidden" id="statusbar"></div>
+<h1>Soldash</h1>
+<h2>Current Solr Instances:</h2>
+<% for(var i=0; i<data.length; i++) {%>
+	<% var index = data[i] %>
+    <h3>
+        <% if(index['index_name'] === null) { %>
+        	<% index['index_name'] = 'None'; %>
+        	Default Index
+        <% } else { %>
+        	<%= index['index_name'] %>
+        <% } %>
+    </h3>
+    
+    <table class="instances" id="instances_<%= index['index_name'] %>">
+		<tr>
+			<th>Host</th>
+			<th>Status</th>
+			<th>Type</th>
+			<th>Version</th>
+			<th>Generation</th>
+			<% for(var i=0; i<commands.length; i++) { %>
+				<% if(commands[i].title) { %>
+					<th><%= commands[i].title %></th>
+				<% } %>
+			<% } %>
+		</tr>
+		<% for(var i=0; i<index.hosts.length; i++) { %>
+			<% var host = index.hosts[i]; %>
+			<% var row_id = [index['index_name'],host.hostname.replace(/\./g,'_'),host.port].join('-'); %>
+			<tr id="<%= row_id %>">
+				<td class="address">
+					<a href="http://<%= host.hostname %>:<%= host.port %>/solr/admin"><%= host.hostname %>:<%= host.port %></a>
+				</td>
+				<% if(host.details) { %>
+					<% var det = host.details.details %>
+					<td class="status <%= solrResponseHeaders[host.details.responseHeader.status] %>">
+						<%= solrResponseHeaders[host.details.responseHeader.status] %>
+					</td>
+					<td class="type <% if(det.isMaster === 'true') { %> master <% } else { %> slave <% } %>">
+						<% if(det.isMaster === 'true') { %>
+							M
+						<% } else { %>
+							S
+						<% } %>
+					</td>
+					<td class="version <% if(det.isSlave == 'true' && !upToDate(det)) { %> out_of_sync <% } %>"><%= det.indexVersion %></td>
+					<td class="generation"><%= det.generation %></td>
+					<% for(var j=0; j<commands.length; j++) { %>
+						<% var command = commands[j]; %>
+						<% if(commands[j].title) { %>
+							<% var element_id = [index['index_name'],host.hostname.replace(/\./g,'_'),host.port,command.command,command.reverse].join('-'); %>
+							<td class="<%= command.command %>">
+								<a href="#">
+									<div class="executebutton <%= getExecuteButtonClass(command.command, det) %>" id="<%= element_id %>"> </div>
+								</a>
+							</td>
+						<% } %>
+					<% } %>
+				<% } else { %>
+					<td class="status critical"><%=host.error%></td>
+				<% } %>
+			</tr>
+		<% } %>
+	</table>
+<% } %>

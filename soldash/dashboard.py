@@ -24,7 +24,7 @@ def execute(command):
     if command == 'restart':
         password = request.form.get('ssh_password','')
         return _restart(hostname, port, password)
-    if index == 'null':
+    if index in ['null', 'None']:
         index = None
     auth = {}
     params = {}
@@ -44,7 +44,10 @@ def execute(command):
 
 @app.route('/details', methods=['GET'])
 def details():
-    return jsonify(_get_details())
+    retval = _get_details()
+    return jsonify({'data': retval,
+                    'solrResponseHeaders': c['responseHeaders'],
+                    'commands': c['commands']})
 
 def _restart(hostname, port, password):
     fabric.env.host_string = hostname
@@ -54,16 +57,18 @@ def _restart(hostname, port, password):
     return jsonify({'result': retval})
 
 def _get_details():
-    retval = {}
+    retval = []
     for index in INDEXES:
-        retval[index] = copy.deepcopy(HOSTS)
-        for host in retval[index]:
+        entry = {'index_name': index, 
+                 'hosts': copy.deepcopy(HOSTS)}
+        for host in entry['hosts']:
             details = _query_solr(host, 'details', index)
             if details['status'] == 'ok':
                 host['details'] = details['data']
             elif details['status'] == 'error':
                 host['details'] = None
                 host['error'] = details['data']
+        retval.append(entry)
     return retval
 
 def _query_solr(host, command, index, params=None):
