@@ -1,0 +1,27 @@
+<% if(data['data']['filelist']) { %>
+    <% data = data['data'] %>
+    <h2>
+        File list for 
+        <% if(host['index'] === 'None') { %>
+            Default Index
+        <% } else { %>
+            <%= host['index'] %>
+        <% } %>
+        on 
+        <%= host['hostname'] %>:<%= host['port'] %>
+    </h2>
+    <table class="fixed_width_font">
+        <tr>
+            <th>Name</th>
+            <th>Size</th>
+            <th>Last Modified</th>
+        </tr>
+        <% for(var i=0; i<data['filelist'].length; i++) {%>
+            <tr>
+                <td><%= data['filelist'][i]['name'] %></td>
+                <td><%= data['filelist'][i]['size'] %></td>
+                <td><%= data['filelist'][i]['lastmodified'] %></td>
+            </tr>
+        <% } %>
+    </table>
+<% } %>
