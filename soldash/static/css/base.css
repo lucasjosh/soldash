@@ -105,3 +105,7 @@ h3 {
     width: 80%;
     margin: 0 auto;
 }
+#filelist_overlay h2 {
+    margin-top: 0;
+    color: #fff;
+}

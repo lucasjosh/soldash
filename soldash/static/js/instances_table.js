@@ -151,7 +151,7 @@ function handleCommandResponse(command, data, status, host, element_id) {
 
 function displayFilelist(data, host) {
 	toggleRefresh(false);
-	var result = new EJS({'url': '/static/ejs/filelist.ejs'}).render(data);
+	var result = new EJS({'url': '/static/ejs/filelist.ejs'}).render({'data': data, 'host': host});
 	var overlay_element = $('#filelist_overlay');
 	overlay_element.html(result);
 	$.modal(overlay_element);
