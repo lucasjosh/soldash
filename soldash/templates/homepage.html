@@ -3,11 +3,14 @@
     <head>
         <title>Solr Dashboard</title>
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/base.css') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/basicmodal/basic.css') }}" />
         <script src="{{ url_for('static', filename='js/jquery-1.6.4.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/simplemodal/jquery.simplemodal.js') }}"></script>
         <script src="{{ url_for('static', filename='js/ejs/ejs_production.js') }}"></script>
         <script src="{{ url_for('static', filename='js/instances_table.js') }}"></script>
     </head>
     <body onload="initialise();">
         <div id="EJS_container">Loading...</div>
+        <div id="filelist_overlay" class="hidden fixed_width_font"></div>
     </body>
 </html>

@@ -11,6 +11,10 @@ colours:
     display: none;
 }
 
+.fixed_width_font {
+	font-family: "Consolas", "Monaco", "Courier New", Courier, monospace;
+}
+
 body {
     background-color: #f1f2d8;
     font-family: Helvetica, Arial, sans-serif;
@@ -95,4 +99,9 @@ h3 {
 }
 .restart .executebutton {
     background-image: url("/static/images/restart.png");
+}
+
+#filelist_overlay table {
+    width: 80%;
+    margin: 0 auto;
 }

@@ -44,7 +44,7 @@
 							S
 						<% } %>
 					</td>
-					<td class="version <% if(det.isSlave == 'true' && !upToDate(det)) { %> out_of_sync <% } %>"><%= det.indexVersion %></td>
+					<td class="version fixed_width_font <% if(det.isSlave == 'true' && !upToDate(det)) { %> out_of_sync <% } %>"><%= det.indexVersion %></td>
 					<td class="generation"><%= det.generation %></td>
 					<% for(var j=0; j<commands.length; j++) { %>
 						<% var command = commands[j]; %>

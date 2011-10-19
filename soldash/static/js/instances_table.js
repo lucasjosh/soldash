@@ -1,9 +1,20 @@
 function initialise() {
     /**
-     * Load data, re-load data every 3 seconds.
+     * Called upon page load.
      */
     update();
-    setInterval('update()', 3000);
+    toggleRefresh(true);
+}
+
+function toggleRefresh(on) {
+	/**
+	 * Turns on or off the automatic refresh of data on the page.
+	 */
+	if(on === true) {
+		refreshHandler = setInterval('update()', 3000);
+	} else {
+		clearInterval(refreshHandler);
+	}
 }
 
 function update() {
@@ -14,8 +25,9 @@ function update() {
         success: function(data, status, jqXHR){
             D = data['data']; // global variable of data
             EJS.config({cache: false});
+            var container = $('#EJS_container');
             var result = new EJS({'url': '/static/ejs/homepage.ejs'}).render(data);
-            document.getElementById('EJS_container').innerHTML = result;
+            container.html(result);
             setupClickHandlers();
         }
     });
@@ -133,7 +145,17 @@ function handleCommandResponse(command, data, status, host, element_id) {
     } else if(command === 'filelist' && data['data']['filelist']) {
         changeIcon(element_id, 'success');
         setStatusBar('Success!', 'success', 2);
+        displayFilelist(data, host);
     }
+}
+
+function displayFilelist(data, host) {
+	toggleRefresh(false);
+	var result = new EJS({'url': '/static/ejs/filelist.ejs'}).render(data);
+	var overlay_element = $('#filelist_overlay');
+	overlay_element.html(result);
+	$.modal(overlay_element);
+	toggleRefresh(true);
 }
 
 function setStatusBar(text, css, hide_seconds) {
