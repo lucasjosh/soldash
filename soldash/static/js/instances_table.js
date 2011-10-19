@@ -12,14 +12,10 @@ function update() {
         type: 'GET',
         data: '',
         success: function(data, status, jqXHR){
-            D = data['data'];
+            D = data['data']; // global variable of data
             EJS.config({cache: false});
             var result = new EJS({'url': '/static/ejs/homepage.ejs'}).render(data);
             document.getElementById('EJS_container').innerHTML = result;
-            /*var instances_tables = $('.instances');
-            for(var i=0; i<instances_tables.length; i++) {
-                compareSlaveVersionsWithMaster(instances_tables[i].id);
-            } */
             setupClickHandlers();
         }
     });
@@ -34,7 +30,7 @@ function setupClickHandlers() {
         var host = getHostFromID(id);
         host['index'] = id[0];
         var command = id[3];
-        if($(this).attr('class').indexOf('enabled') > 0) { 
+        if($(this).attr('class').indexOf('enabled') >= 0) { 
         	command = id[4];
         }
         command_click(command, host, idConverter(id));
@@ -71,7 +67,8 @@ function idConverter(data) {
         retval = data.split('-');
         retval[1] = retval[1].replace(/\_/g,'.') 
     } else if(typeof(data) === 'object'){
-        retval = [data[0],data[1].replace(/\./g,'_'),data[2],data[3],data[4]].join('-');
+    	data[1] = data[1].replace(/\./g,'_');
+        retval = data.join('-');
     }
     return retval;
 }
@@ -85,8 +82,6 @@ function command_click(command, host, element_id) {
      */
     changeIcon(element_id, 'working');
     data = getSupportingPOSTData(command, host, element_id);
-    console.log('supporting data');
-    console.log(data);
     $.ajax({
         url: '/execute/' + command,
         type: 'POST',
@@ -101,13 +96,12 @@ function getSupportingPOSTData(command, host, element_id) {
     /**
      * Extract extra data to be sent in the POST request.
      */
-	x = host;
     var retval = 'host=' + host['hostname'] + '&port=' + host['port'] + '&index=' + host['index'];
     if(! $.isEmptyObject(host['auth'])) {
         retval += '&username=' + host['auth']['username'] + '&password=' + host['auth']['password'];
     }
     if(command === 'filelist') {
-        retval += '&indexversion=' + getIndexVersionFromElementID(element_id);
+        retval += '&indexversion=' + host['details']['details']['indexVersion'];
     } else if (command === 'restart') {
         var password = window.prompt('Please enter SSH password to restart Solr:','');
         retval += '&ssh_password=' + password;
@@ -124,7 +118,6 @@ function handleCommandResponse(command, data, status, host, element_id) {
      * host: same as in command_click()
      * element_id: same as in command_click() 
      */
-    console.log(data);
     if(data['status'] == 'error') {
     	changeIcon(element_id, 'error');
         setStatusBar(data['data'], 'error', 5);
@@ -177,7 +170,6 @@ function getExecuteButtonClass(command, det) {
         }
     } else if(command === 'enablepoll') {
         if(det['isSlave'] === 'true') {
-        	console.log(det);
             if(det['slave']['isPollingDisabled'] === 'true') {
                 return 'disabled';
             } else {
@@ -188,8 +180,16 @@ function getExecuteButtonClass(command, det) {
         }
     } else if(command === 'enablereplication') {
         if(det['isMaster'] === 'true') {
-            console.log(det);
-        	return 'ready';
+        	if('master' in det) {
+        		if(det['master']['replicationEnabled'] === 'true') {
+        			return 'enabled';
+        		} else {
+        			return 'disabled';
+        		}
+        	} else {
+        		// Solr 1.4.1
+        		return 'ready';
+        	}
         } else {
             return 'hidden';
         }
