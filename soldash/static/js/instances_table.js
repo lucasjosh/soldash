@@ -7,14 +7,14 @@ function initialise() {
 }
 
 function toggleRefresh(on) {
-	/**
-	 * Turns on or off the automatic refresh of data on the page.
-	 */
-	if(on === true) {
-		refreshHandler = setInterval('update()', 3000);
-	} else {
-		clearInterval(refreshHandler);
-	}
+    /**
+     * Turns on or off the automatic refresh of data on the page.
+     */
+    if(on === true) {
+        refreshHandler = setInterval('update()', 3000);
+    } else {
+        clearInterval(refreshHandler);
+    }
 }
 
 function update() {
@@ -34,16 +34,16 @@ function update() {
 }
 
 function setupClickHandlers() {
-	/**
-	 * Assign click handlers to all buttons.
-	 */
+    /**
+     * Assign click handlers to all buttons.
+     */
     $('.executebutton').click(function() { 
         var id = idConverter($(this)[0].id);
         var host = getHostFromID(id);
         host['index'] = id[0];
         var command = id[3];
         if($(this).attr('class').indexOf('enabled') >= 0) { 
-        	command = id[4];
+            command = id[4];
         }
         command_click(command, host, idConverter(id));
     });
@@ -79,7 +79,7 @@ function idConverter(data) {
         retval = data.split('-');
         retval[1] = retval[1].replace(/\_/g,'.') 
     } else if(typeof(data) === 'object'){
-    	data[1] = data[1].replace(/\./g,'_');
+        data[1] = data[1].replace(/\./g,'_');
         retval = data.join('-');
     }
     return retval;
@@ -131,7 +131,7 @@ function handleCommandResponse(command, data, status, host, element_id) {
      * element_id: same as in command_click() 
      */
     if(data['status'] == 'error') {
-    	changeIcon(element_id, 'error');
+        changeIcon(element_id, 'error');
         setStatusBar(data['data'], 'error', 5);
     } else if(data['data']['status'] == 'ERROR') {
         changeIcon(element_id, 'error');
@@ -150,12 +150,12 @@ function handleCommandResponse(command, data, status, host, element_id) {
 }
 
 function displayFilelist(data, host) {
-	toggleRefresh(false);
-	var result = new EJS({'url': '/static/ejs/filelist.ejs'}).render({'data': data, 'host': host});
-	var overlay_element = $('#filelist_overlay');
-	overlay_element.html(result);
-	$.modal(overlay_element);
-	toggleRefresh(true);
+    toggleRefresh(false);
+    var result = new EJS({'url': '/static/ejs/filelist.ejs'}).render({'data': data, 'host': host});
+    var overlay_element = $('#filelist_overlay');
+    overlay_element.html(result);
+    $.modal(overlay_element);
+    toggleRefresh(true);
 }
 
 function setStatusBar(text, css, hide_seconds) {
@@ -176,10 +176,10 @@ function setStatusBar(text, css, hide_seconds) {
 }
 
 function getExecuteButtonClass(command, det) {
-	/**
-	 * Decides what CSS Classes to apply to buttons in the table, 
-	 * given the data the server returns. 
-	 */
+    /**
+     * Decides what CSS Classes to apply to buttons in the table, 
+     * given the data the server returns. 
+     */
     if(command === 'fetchindex') {
         if(det['isSlave'] === 'true') {
             if(det['slave']['isReplicating'] === 'true') {
@@ -202,16 +202,16 @@ function getExecuteButtonClass(command, det) {
         }
     } else if(command === 'enablereplication') {
         if(det['isMaster'] === 'true') {
-        	if('master' in det) {
-        		if(det['master']['replicationEnabled'] === 'true') {
-        			return 'enabled';
-        		} else {
-        			return 'disabled';
-        		}
-        	} else {
-        		// Solr 1.4.1
-        		return 'ready';
-        	}
+            if('master' in det) {
+                if(det['master']['replicationEnabled'] === 'true') {
+                    return 'enabled';
+                } else {
+                    return 'disabled';
+                }
+            } else {
+                // Solr 1.4.1
+                return 'ready';
+            }
         } else {
             return 'hidden';
         }
@@ -232,5 +232,5 @@ function changeIcon(element_id, new_icon) {
 }
 
 function upToDate(det) {
-	return det['slave']['masterDetails']['indexVersion'] == det['indexVersion'];
+    return det['slave']['masterDetails']['indexVersion'] == det['indexVersion'];
 }
