@@ -3,8 +3,3 @@ pre-alpha stage.
 
 It aims to be a fully functional dashboard, providing full control over your Solr architecture. 
 
-
-TODO:
-- Make page automatically update data
-- Show whether nodes are already fetching indexes, have replication disabled or enabled, etc
-- Display filelist when requested
