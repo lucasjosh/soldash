@@ -9,7 +9,7 @@ It aims to be a fully functional dashboard, providing full control over your Sol
 * Issue commands to fetch indexes, view file lists of index, restart solr instances and enable/disable polling and replication.
 * Support for multi-core Solr clusters.
 
-It is still very young software and may contain bugs. Any feedback should be sent to _aengus.walton at edelight dot de_ and would be greatly appreciated.
+It is still very young software and may contain bugs. Any feedback should be sent to _opensource at edelight dot de_ and would be greatly appreciated.
 
 ## Getting Started
 * Clone this git repository
