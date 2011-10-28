@@ -1,8 +1,11 @@
 HOSTS = [
-    {'hostname': 'localhost', 
-     'port': 8983, 
-     'auth': {}}
+    {
+        'hostname': 'localhost',
+        'port': 8983,
+        'auth': {}
+    }
 ]
+
 INDEXES = [None]
 
 SSH_USERNAME = 'soldash'

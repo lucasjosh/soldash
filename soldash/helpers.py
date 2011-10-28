@@ -6,12 +6,18 @@ import fabric.api as fabric
 
 from soldash.settings import HOSTS, INDEXES, SSH_USERNAME, TIMEOUT
 
+
 def restart(hostname, port, password):
     fabric.env.host_string = hostname
     fabric.env.user = SSH_USERNAME
     fabric.env.password = password
-    retval = fabric.sudo('/etc/init.d/solr restart')
+    try:
+        retval = fabric.sudo('/etc/init.d/solr restart')
+    except SystemExit as e:
+        return jsonify(
+                {'result': "Error: Could not connect to the solr instance"})
     return jsonify({'result': retval})
+
 
 def get_details():
     retval = []
