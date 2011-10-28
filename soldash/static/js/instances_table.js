@@ -11,7 +11,7 @@ function toggleRefresh(on) {
      * Turns on or off the automatic refresh of data on the page.
      */
     if(on === true) {
-        refreshHandler = setInterval('update()', 3000);
+        refreshHandler = setInterval('update()', D['refresh'] * 1000);
     } else {
         clearInterval(refreshHandler);
     }
@@ -23,8 +23,8 @@ function update() {
         type: 'GET',
         data: '',
         success: function(data, status, jqXHR){
-            D = data['data']; // global variable of data
-            EJS.config({cache: false});
+            D['data'] = data['data']; // global variable of data
+            EJS.config({cache: !D['debug']});
             var container = $('#EJS_container');
             var result = new EJS({'url': '/static/ejs/homepage.ejs'}).render(data);
             container.html(result);
@@ -56,8 +56,8 @@ function getHostFromID(id) {
     if(typeof(id) === 'string') {
         id = idConverter(id);
     }
-    for(var i=0; i<D.length; i++) {
-        var index = D[i];
+    for(var i=0; i<D['data'].length; i++) {
+        var index = D['data'][i];
         if(!index['index_name'] == id[0]) {
             break;
         }
@@ -132,19 +132,19 @@ function handleCommandResponse(command, data, status, host, element_id) {
      */
     if(data['status'] == 'error') {
         changeIcon(element_id, 'error');
-        setStatusBar(data['data'], 'error', 5);
+        setStatusBar(data['data'], command, 'error', 5);
     } else if(data['data']['status'] == 'ERROR') {
         changeIcon(element_id, 'error');
-        setStatusBar(data['data']['message'], 'error', 5);
+        setStatusBar(data['data']['message'], command, 'error', 5);
     } else if(data['data']['status'] == 'OK') {
         changeIcon(element_id, 'success');
-        setStatusBar('Success!', 'success', 2);
+        setStatusBar('Success!', command, 'success', 2);
     } else if(data['data']['status'] == 'no indexversion specified') {
         changeIcon(element_id, 'error');
-        setStatusBar(data['data']['status'], 'error', 5);
+        setStatusBar(data['data']['status'], command, 'error', 5);
     } else if(command === 'filelist' && data['data']['filelist']) {
         changeIcon(element_id, 'success');
-        setStatusBar('Success!', 'success', 2);
+        setStatusBar('Success!', command, 'success', 2);
         displayFilelist(data, host);
     }
 }
@@ -158,9 +158,10 @@ function displayFilelist(data, host) {
     toggleRefresh(true);
 }
 
-function setStatusBar(text, css, hide_seconds) {
+function setStatusBar(text, command, css, hide_seconds) {
     /**
      * text: the status bar's html content
+     * command: command that was executed
      * css: a css class to add
      * hide_seconds: hide the statusbar after n seconds
      * 
@@ -169,7 +170,7 @@ function setStatusBar(text, css, hide_seconds) {
     bar.removeAttr('style');
     bar.removeClass('hidden success error');
     bar.addClass(css);
-    bar.html(text);
+    bar.html(command + ': ' + text);
     setTimeout(function() {
         bar.fadeOut('slow');
     }, hide_seconds * 1000);

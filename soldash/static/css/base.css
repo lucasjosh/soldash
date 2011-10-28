@@ -80,10 +80,10 @@ h3 {
     margin: 0 auto;
 }
 .executebutton.enabled {
-    background-image: url("/static/images/enabled.png");
+    background-image: url("/static/images/disable.png");
 }
 .executebutton.disabled {
-    background-image: url("/static/images/disabled.png");
+    background-image: url("/static/images/enable.png");
 }
 .executebutton.ready {
     background-image: url("/static/images/ready.png");

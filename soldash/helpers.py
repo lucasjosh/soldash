@@ -1,68 +1,25 @@
 import copy
-import urllib
 import urllib2
 import simplejson
 import socket
 import fabric.api as fabric
 
-from flask import Flask, render_template, request, jsonify
+from soldash.settings import HOSTS, INDEXES, SSH_USERNAME, TIMEOUT
 
-from settings import c, HOSTS, INDEXES, SSH_USERNAME, TIMEOUT
-
-app = Flask(__name__)
-
-@app.route('/')
-def homepage():
-    indexes = _get_details()
-    return render_template('homepage.html', indexes=indexes, c=c)
-
-@app.route('/execute/<command>', methods=['POST'])
-def execute(command):
-    hostname = request.form['host']
-    port = request.form['port']
-    index = request.form['index']
-    if command == 'restart':
-        password = request.form.get('ssh_password','')
-        return _restart(hostname, port, password)
-    if index in ['null', 'None']:
-        index = None
-    auth = {}
-    params = {}
-    try:
-        auth = {'username': request.form['username'],
-                'password': request.form['password']}
-    except KeyError, e:
-        pass
-    try:
-        params = {'indexversion': request.form['indexversion']}
-    except KeyError, e:
-        pass
-    host = {'hostname': hostname,
-            'port': port,
-            'auth': auth}
-    return jsonify(_query_solr(host, command, index, params=params))
-
-@app.route('/details', methods=['GET'])
-def details():
-    retval = _get_details()
-    return jsonify({'data': retval,
-                    'solrResponseHeaders': c['responseHeaders'],
-                    'commands': c['commands']})
-
-def _restart(hostname, port, password):
+def restart(hostname, port, password):
     fabric.env.host_string = hostname
     fabric.env.user = SSH_USERNAME
     fabric.env.password = password
     retval = fabric.sudo('/etc/init.d/solr restart')
     return jsonify({'result': retval})
 
-def _get_details():
+def get_details():
     retval = []
     for index in INDEXES:
         entry = {'index_name': index, 
                  'hosts': copy.deepcopy(HOSTS)}
         for host in entry['hosts']:
-            details = _query_solr(host, 'details', index)
+            details = query_solr(host, 'details', index)
             if details['status'] == 'ok':
                 host['details'] = details['data']
             elif details['status'] == 'error':
@@ -71,7 +28,7 @@ def _get_details():
         retval.append(entry)
     return retval
 
-def _query_solr(host, command, index, params=None):
+def query_solr(host, command, index, params=None):
     socket.setdefaulttimeout(TIMEOUT)
     if index:
         url = 'http://%s:%s/solr/%s/replication?command=%s&wt=json' % (host['hostname'], 
@@ -104,6 +61,3 @@ def _query_solr(host, command, index, params=None):
         retval = {'status': 'error', 
                   'data': 'down'}
     return retval
-
-if __name__ == '__main__':
-    app.run(debug=True)
