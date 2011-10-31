@@ -109,3 +109,11 @@ h3 {
     margin-top: 0;
     color: #fff;
 }
+
+.ssh_login {
+    font-size: 1.2em;
+    color: #fff;
+}
+.ssh_login input {
+    font-size: 1.2em;
+}

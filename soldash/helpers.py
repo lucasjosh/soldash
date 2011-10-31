@@ -4,19 +4,20 @@ import simplejson
 import socket
 import fabric.api as fabric
 
-from soldash.settings import HOSTS, INDEXES, SSH_USERNAME, TIMEOUT
+from flask import jsonify
+from soldash.settings import HOSTS, INDEXES, TIMEOUT
 
-
-def restart(hostname, port, password):
+def restart(hostname, port, username, password):
     fabric.env.host_string = hostname
-    fabric.env.user = SSH_USERNAME
+    fabric.env.user = username
     fabric.env.password = password
     fabric.env.abort_on_errors = True
     try:
         retval = fabric.sudo('/etc/init.d/solr restart')
     except SystemExit as e:
-        return jsonify(
-                {'result': "Error: Could not connect to the solr instance"})
+        return jsonify({'result': 'Error: Could not connect to the solr instance'})
+    except Exception as e:
+        return jsonify({'result': 'Error: Unknown Error'})
     return jsonify({'result': retval})
 
 

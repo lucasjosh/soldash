@@ -2,7 +2,7 @@ function initialise() {
     /**
      * Called upon page load.
      */
-    update();
+    update(false);
     toggleRefresh(true);
 }
 
@@ -17,13 +17,20 @@ function toggleRefresh(on) {
     }
 }
 
-function update() {
-    $.ajax({
+function update(async) {
+    async = (typeof async == 'undefined') ?
+    		true : async;
+	$.ajax({
         url: '/details',
         type: 'GET',
         data: '',
+        async: async,
         success: function(data, status, jqXHR){
-            D['data'] = data['data']; // global variable of data
+    	    D = {'debug': data['debug'], 'refresh': data['js_refresh'], 
+    	    	 'ssh_username': data['ssh_username'], 
+    	    	 'hide_status_msg_success': data['hide_status_msg_success'],
+    	    	 'hide_status_msg_error': data['hide_status_msg_success']};
+    	    D['data'] = data['data']; // global variable of data
             EJS.config({cache: !D['debug']});
             var container = $('#EJS_container');
             var result = new EJS({'url': '/static/ejs/homepage.ejs'}).render(data);
@@ -93,15 +100,19 @@ function command_click(command, host, element_id) {
      * element_id: id of the element that was clicked to trigger this function
      */
     changeIcon(element_id, 'working');
-    data = getSupportingPOSTData(command, host, element_id);
-    $.ajax({
-        url: '/execute/' + command,
-        type: 'POST',
-        data: data,
-        success: function(data, status, jqXHR){
-            handleCommandResponse(command, data, status, host, element_id);
-        }
-    });
+    if(command == 'restart') {
+    	displayPasswordPrompt(host);
+    } else {
+	    data = getSupportingPOSTData(command, host, element_id);
+	    $.ajax({
+	        url: '/execute/' + command,
+	        type: 'POST',
+	        data: data,
+	        success: function(data, status, jqXHR){
+	            handleCommandResponse(command, data, status, host, element_id);
+	        }
+	    });
+    }
 }
 
 function getSupportingPOSTData(command, host, element_id) {
@@ -114,9 +125,6 @@ function getSupportingPOSTData(command, host, element_id) {
     }
     if(command === 'filelist') {
         retval += '&indexversion=' + host['details']['details']['indexVersion'];
-    } else if (command === 'restart') {
-        var password = window.prompt('Please enter SSH password to restart Solr:','');
-        retval += '&ssh_password=' + password;
     }
     return retval;
 }
@@ -132,30 +140,58 @@ function handleCommandResponse(command, data, status, host, element_id) {
      */
     if(data['status'] == 'error') {
         changeIcon(element_id, 'error');
-        setStatusBar(data['data'], command, 'error', 5);
+        setStatusBar(data['data'], command, 'error', D['hide_status_msg_error']);
     } else if(data['data']['status'] == 'ERROR') {
         changeIcon(element_id, 'error');
-        setStatusBar(data['data']['message'], command, 'error', 5);
+        setStatusBar(data['data']['message'], command, 'error', D['hide_status_msg_error']);
     } else if(data['data']['status'] == 'OK') {
         changeIcon(element_id, 'success');
-        setStatusBar('Success!', command, 'success', 2);
+        setStatusBar('Success!', command, 'success', D['hide_status_msg_success']);
     } else if(data['data']['status'] == 'no indexversion specified') {
         changeIcon(element_id, 'error');
-        setStatusBar(data['data']['status'], command, 'error', 5);
+        setStatusBar(data['data']['status'], command, 'error', D['hide_status_msg_error']);
     } else if(command === 'filelist' && data['data']['filelist']) {
         changeIcon(element_id, 'success');
-        setStatusBar('Success!', command, 'success', 2);
+        setStatusBar('Success!', command, 'success', D['hide_status_msg_success']);
         displayFilelist(data, host);
     }
 }
 
 function displayFilelist(data, host) {
-    toggleRefresh(false);
+	toggleRefresh(false);
     var result = new EJS({'url': '/static/ejs/filelist.ejs'}).render({'data': data, 'host': host});
     var overlay_element = $('#filelist_overlay');
     overlay_element.html(result);
     $.modal(overlay_element);
     toggleRefresh(true);
+}
+
+function displayPasswordPrompt(host) {
+    var result = new EJS({'url': '/static/ejs/password.ejs'}).render({'host': host});
+    var overlay_element = $('#filelist_overlay');
+    overlay_element.html(result);
+    $('#ssh_login_form').submit(function() {
+    	$('#ssh_login_form_status').addClass('working');
+    	$.ajax({
+	        url: '/execute/restart',
+	        type: 'POST',
+	        data: 'host=' + host['hostname'] + '&port=' + host['port'] + '&ssh_username=' + $('#ssh_login_username').val() + '&ssh_password=' + $('#ssh_login_password').val(),
+	        success: function(data, status, jqXHR){
+    			$('#ssh_login_form_status').removeClass('working');
+    			if(data['result'].indexOf('Starting Jetty: OK') > -1) {
+    				$('#ssh_login_form_status').addClass('success');
+    				setStatusBar('Solr instance restarting!', 'restart', 'success', D['hide_status_msg_success']);
+    			} else {
+    				$('#ssh_login_form_status').addClass('error');
+    				setStatusBar('Error occured:' + data['result'], 'restart', 'error', D['hide_status_msg_success'])
+    			}
+    			console.log(data);
+	        }
+	    });
+    	return false;
+    });
+    $.modal(overlay_element);
+    
 }
 
 function setStatusBar(text, command, css, hide_seconds) {

@@ -50,14 +50,17 @@ If you have a default index and two additional cores, INDEXES should be defined 
 
     INDEXES = [None, 'core1', 'core2']
 
-### SSH_USERNAME
-SSH_USERNAME is the username Soldash will use to login to a host using Fabric in order to restart the Solr daemon.
-
 ### TIMEOUT
 TIMEOUT is the timeout (in seconds) for queries to a Solr client. It is best to keep this number relatively low as requests are (not yet) parallelized.
 
 ### JS_REFRESH
 JS_REFRESH defines how often (in seconds) a user's browser should refresh the data displayed on the page.
+
+### HIDE_STATUS_MSG_SUCCESS
+Defines how many seconds to wait before hiding a status message if it's being displayed by a successful command execution.
+
+### HIDE_STATUS_MSG_ERROR
+The same as the previous, only for an unsuccessful command execution.
 
 ### DEBUG
 If enabled, the web application will be started in Flask's debug mode (allowing access to traceroutes, etc) and caching of the javascript templates will be disabled. 

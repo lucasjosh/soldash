@@ -2,22 +2,24 @@ from flask import render_template, request, jsonify
 
 from soldash import app
 from soldash.helpers import restart, get_details, query_solr
-from soldash.settings import RESPONSEHEADERS, COMMANDS, JS_REFRESH, DEBUG
+from soldash.settings import (RESPONSEHEADERS, COMMANDS, JS_REFRESH, 
+                              DEBUG, HIDE_STATUS_MSG_SUCCESS, HIDE_STATUS_MSG_ERROR)
 
 @app.route('/')
 def homepage():
     indexes = get_details()
-    return render_template('homepage.html', indexes=indexes, 
-                           JS_REFRESH=JS_REFRESH, DEBUG=str(DEBUG).lower())
+    return render_template('homepage.html', indexes=indexes)
 
 @app.route('/execute/<command>', methods=['POST'])
 def execute(command):
     hostname = request.form['host']
     port = request.form['port']
-    index = request.form['index']
     if command == 'restart':
+        username = request.form.get('ssh_username','')
         password = request.form.get('ssh_password','')
-        return restart(hostname, port, password)
+        return restart(hostname, port, username, password)
+    
+    index = request.form['index']
     if index in ['null', 'None']:
         index = None
     auth = {}
@@ -41,4 +43,8 @@ def details():
     retval = get_details()
     return jsonify({'data': retval,
                     'solrResponseHeaders': RESPONSEHEADERS,
-                    'commands': COMMANDS})
+                    'commands': COMMANDS,
+                    'js_refresh': JS_REFRESH,
+                    'debug': str(DEBUG).lower(),
+                    'hide_status_msg_success': HIDE_STATUS_MSG_SUCCESS,
+                    'hide_status_msg_error': HIDE_STATUS_MSG_ERROR})
