@@ -11,7 +11,7 @@ HOSTS = [
     }
 ]
 
-INDEXES = [None]
+CORES = [None]
 
 TIMEOUT = 1
 
@@ -23,6 +23,8 @@ HIDE_STATUS_MSG_ERROR = 5
 
 DEBUG = True
 
+DEFAULTCORENAME = 'collection1'
+
 RESPONSEHEADERS = {0: 'ok'}
 
 COMMANDS = [
@@ -32,5 +34,5 @@ COMMANDS = [
     {'command': 'details', 'title': False}, 
     {'command': 'filelist', 'title': 'File List'},
     {'command': 'backup', 'title': 'Backup'},
-    {'command': 'restart', 'title': 'Restart Solr'}
+    {'command': 'reload', 'title': 'Reload Index'}
 ]

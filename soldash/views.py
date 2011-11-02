@@ -1,27 +1,23 @@
 from flask import render_template, request, jsonify
 
 from soldash import app
-from soldash.helpers import restart, get_details, query_solr
+from soldash.helpers import get_details, query_solr
 from soldash.settings import (RESPONSEHEADERS, COMMANDS, JS_REFRESH, 
                               DEBUG, HIDE_STATUS_MSG_SUCCESS, HIDE_STATUS_MSG_ERROR)
 
 @app.route('/')
 def homepage():
-    indexes = get_details()
-    return render_template('homepage.html', indexes=indexes)
+    cores = get_details()
+    return render_template('homepage.html', cores=cores)
 
 @app.route('/execute/<command>', methods=['POST'])
 def execute(command):
     hostname = request.form['host']
     port = request.form['port']
-    if command == 'restart':
-        username = request.form.get('ssh_username','')
-        password = request.form.get('ssh_password','')
-        return restart(hostname, port, username, password)
     
-    index = request.form['index']
-    if index in ['null', 'None']:
-        index = None
+    core = request.form['core']
+    if core in ['null', 'None', 'undefined']:
+        core = None
     auth = {}
     params = {}
     try:
@@ -36,7 +32,7 @@ def execute(command):
     host = {'hostname': hostname,
             'port': port,
             'auth': auth}
-    return jsonify(query_solr(host, command, index, params=params))
+    return jsonify(query_solr(host, command, core, params=params))
 
 @app.route('/details', methods=['GET'])
 def details():

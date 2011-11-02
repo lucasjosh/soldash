@@ -2,32 +2,17 @@ import copy
 import urllib2
 import simplejson
 import socket
-import fabric.api as fabric
 
 from flask import jsonify
-from soldash.settings import HOSTS, INDEXES, TIMEOUT
-
-def restart(hostname, port, username, password):
-    fabric.env.host_string = hostname
-    fabric.env.user = username
-    fabric.env.password = password
-    fabric.env.abort_on_prompts = True
-    try:
-        retval = fabric.sudo('/etc/init.d/solr restart')
-    except SystemExit as e:
-        return jsonify({'result': 'Error: Could not connect to the solr instance'})
-    except Exception as e:
-        return jsonify({'result': 'Error: Unknown Error'})
-    return jsonify({'result': retval})
-
+from soldash.settings import HOSTS, CORES, TIMEOUT, DEFAULTCORENAME
 
 def get_details():
     retval = []
-    for index in INDEXES:
-        entry = {'index_name': index, 
+    for core in CORES:
+        entry = {'core_name': core, 
                  'hosts': copy.deepcopy(HOSTS)}
         for host in entry['hosts']:
-            details = query_solr(host, 'details', index)
+            details = query_solr(host, 'details', core)
             if details['status'] == 'ok':
                 host['details'] = details['data']
             elif details['status'] == 'error':
@@ -36,17 +21,19 @@ def get_details():
         retval.append(entry)
     return retval
 
-def query_solr(host, command, index, params=None):
+def query_solr(host, command, core, params=None):
     socket.setdefaulttimeout(TIMEOUT)
-    if index:
+    if not core:
+        core = DEFAULTCORENAME
+    if command == 'reload':
+        url = 'http://%s:%s/solr/admin/cores?action=RELOAD&wt=json&core=%s' % (host['hostname'], 
+                                                                               host['port'],
+                                                                               core)
+    else:
         url = 'http://%s:%s/solr/%s/replication?command=%s&wt=json' % (host['hostname'], 
                                                                        host['port'], 
-                                                                       index,
+                                                                       core,
                                                                        command)
-    else:
-        url = 'http://%s:%s/solr/replication?command=%s&wt=json' % (host['hostname'], 
-                                                                    host['port'], 
-                                                                    command)
     if params:
         for key in params:
             url += '&%s=%s' % (key, params[key])

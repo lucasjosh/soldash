@@ -39,8 +39,8 @@ If HTTP authentication were required by the Solr instance in the last example, t
      'port': 8983, 
      'auth': {'username': 'test', 'password': 'test'}}
 
-### INDEXES
-INDEXES is a list of the cores available on the Solr instances. At the moment, due to the primary requirements of this project, Soldash presumes that all Solr instances have the same cores.
+### CORES
+CORES is a list of the cores available on the Solr instances. At the moment, due to the primary requirements of this project, Soldash presumes that all Solr instances have the same cores.
 
 If you do not have a multi-core set up, INDEXES should be defined so:
 
@@ -64,3 +64,7 @@ The same as the previous, only for an unsuccessful command execution.
 
 ### DEBUG
 If enabled, the web application will be started in Flask's debug mode (allowing access to traceroutes, etc) and caching of the javascript templates will be disabled. 
+
+### DEFAULTCORENAME
+This is the name of your default core in a single-core setup. You can set or find out what this is by editing your
+solr.xml file.

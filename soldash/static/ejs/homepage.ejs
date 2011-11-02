@@ -1,16 +1,16 @@
 <h1>Soldash</h1>
 <% for(var i=0; i<data.length; i++) {%>
-	<% var index = data[i] %>
+	<% var core = data[i] %>
     <h3>
-        <% if(index['index_name'] === null) { %>
-        	<% index['index_name'] = 'None'; %>
-        	Default Index
+        <% if(core['core_name'] === null) { %>
+        	<% core['core_name'] = 'None'; %>
+        	Default Core
         <% } else { %>
-        	<%= index['index_name'] %>
+        	<%= core['core_name'] %>
         <% } %>
     </h3>
     
-    <table class="instances" id="instances_<%= index['index_name'] %>">
+    <table class="instances" id="instances_<%= core['core_name'] %>">
 		<tr>
 			<th>Host</th>
 			<th>Status</th>
@@ -23,9 +23,9 @@
 				<% } %>
 			<% } %>
 		</tr>
-		<% for(var i=0; i<index.hosts.length; i++) { %>
-			<% var host = index.hosts[i]; %>
-			<% var row_id = [index['index_name'],host.hostname.replace(/\./g,'_'),host.port].join('-'); %>
+		<% for(var i=0; i<core.hosts.length; i++) { %>
+			<% var host = core.hosts[i]; %>
+			<% var row_id = [core['core_name'],host.hostname.replace(/\./g,'_'),host.port].join('-'); %>
 			<tr id="<%= row_id %>">
 				<td class="address">
 					<a href="http://<%= host.hostname %>:<%= host.port %>/solr/admin"><%= host.hostname %></a>
@@ -47,7 +47,7 @@
 					<% for(var j=0; j<commands.length; j++) { %>
 						<% var command = commands[j]; %>
 						<% if(commands[j].title) { %>
-							<% var element_id = [index['index_name'],host.hostname.replace(/\./g,'_'),host.port,command.command,command.reverse].join('-'); %>
+							<% var element_id = [core['core_name'],host.hostname.replace(/\./g,'_'),host.port,command.command,command.reverse].join('-'); %>
 							<td class="<%= command.command %>">
 								<a href="#">
 									<div class="executebutton <%= getExecuteButtonClass(command.command, det) %>" id="<%= element_id %>"> </div>
