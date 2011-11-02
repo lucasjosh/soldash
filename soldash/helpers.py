@@ -11,7 +11,7 @@ def restart(hostname, port, username, password):
     fabric.env.host_string = hostname
     fabric.env.user = username
     fabric.env.password = password
-    fabric.env.abort_on_errors = True
+    fabric.env.abort_on_prompts = True
     try:
         retval = fabric.sudo('/etc/init.d/solr restart')
     except SystemExit as e:
