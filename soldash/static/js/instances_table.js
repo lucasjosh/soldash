@@ -19,18 +19,18 @@ function toggleRefresh(on) {
 
 function update(async) {
     async = (typeof async == 'undefined') ?
-    		true : async;
-	$.ajax({
+            true : async;
+    $.ajax({
         url: '/details',
         type: 'GET',
         data: '',
         async: async,
         success: function(data, status, jqXHR){
-    	    D = {'debug': data['debug'], 'refresh': data['js_refresh'], 
-    	    	 'ssh_username': data['ssh_username'], 
-    	    	 'hide_status_msg_success': data['hide_status_msg_success'],
-    	    	 'hide_status_msg_error': data['hide_status_msg_success']};
-    	    D['data'] = data['data']; // global variable of data
+            D = {'debug': data['debug'], 'refresh': data['js_refresh'], 
+                 'ssh_username': data['ssh_username'], 
+                 'hide_status_msg_success': data['hide_status_msg_success'],
+                 'hide_status_msg_error': data['hide_status_msg_success']};
+            D['data'] = data['data']; // global variable of data
             EJS.config({cache: !D['debug']});
             var container = $('#EJS_container');
             var result = new EJS({'url': '/static/ejs/homepage.ejs'}).render(data);
@@ -101,17 +101,17 @@ function command_click(command, host, element_id) {
      */
     changeIcon(element_id, 'working');
     if(command == 'restart') {
-    	displayPasswordPrompt(host);
+        displayPasswordPrompt(host);
     } else {
-	    data = getSupportingPOSTData(command, host, element_id);
-	    $.ajax({
-	        url: '/execute/' + command,
-	        type: 'POST',
-	        data: data,
-	        success: function(data, status, jqXHR){
-	            handleCommandResponse(command, data, status, host, element_id);
-	        }
-	    });
+        data = getSupportingPOSTData(command, host, element_id);
+        $.ajax({
+            url: '/execute/' + command,
+            type: 'POST',
+            data: data,
+            success: function(data, status, jqXHR){
+                handleCommandResponse(command, data, status, host, element_id);
+            }
+        });
     }
 }
 
@@ -158,7 +158,7 @@ function handleCommandResponse(command, data, status, host, element_id) {
 }
 
 function displayFilelist(data, host) {
-	toggleRefresh(false);
+    toggleRefresh(false);
     var result = new EJS({'url': '/static/ejs/filelist.ejs'}).render({'data': data, 'host': host});
     var overlay_element = $('#filelist_overlay');
     overlay_element.html(result);
@@ -171,24 +171,24 @@ function displayPasswordPrompt(host) {
     var overlay_element = $('#filelist_overlay');
     overlay_element.html(result);
     $('#ssh_login_form').submit(function() {
-    	$('#ssh_login_form_status').addClass('working');
-    	$.ajax({
-	        url: '/execute/restart',
-	        type: 'POST',
-	        data: 'host=' + host['hostname'] + '&port=' + host['port'] + '&ssh_username=' + $('#ssh_login_username').val() + '&ssh_password=' + $('#ssh_login_password').val(),
-	        success: function(data, status, jqXHR){
-    			$('#ssh_login_form_status').removeClass('working');
-    			if(data['result'].indexOf('Starting Jetty: OK') > -1) {
-    				$('#ssh_login_form_status').addClass('success');
-    				setStatusBar('Solr instance restarting!', 'restart', 'success', D['hide_status_msg_success']);
-    			} else {
-    				$('#ssh_login_form_status').addClass('error');
-    				setStatusBar('Error occured:' + data['result'], 'restart', 'error', D['hide_status_msg_success'])
-    			}
-    			console.log(data);
-	        }
-	    });
-    	return false;
+        $('#ssh_login_form_status').addClass('working');
+        $.ajax({
+            url: '/execute/restart',
+            type: 'POST',
+            data: 'host=' + host['hostname'] + '&port=' + host['port'] + '&ssh_username=' + $('#ssh_login_username').val() + '&ssh_password=' + $('#ssh_login_password').val(),
+            success: function(data, status, jqXHR){
+                $('#ssh_login_form_status').removeClass('working');
+                if(data['result'].indexOf('Starting Jetty: OK') > -1) {
+                    $('#ssh_login_form_status').addClass('success');
+                    setStatusBar('Solr instance restarting!', 'restart', 'success', D['hide_status_msg_success']);
+                } else {
+                    $('#ssh_login_form_status').addClass('error');
+                    setStatusBar('Error occured:' + data['result'], 'restart', 'error', D['hide_status_msg_success'])
+                }
+                console.log(data);
+            }
+        });
+        return false;
     });
     $.modal(overlay_element);
     

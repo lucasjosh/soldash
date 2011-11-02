@@ -1,8 +1,13 @@
 HOSTS = [
     {
-        'hostname': 'localhost',
+        'hostname': '33.33.33.11',
         'port': 8983,
-        'auth': {}
+        'auth': {'username': 'test', 'password': 'test'}
+    },
+    {
+        'hostname': '33.33.33.12',
+        'port': 8983,
+        'auth': {'username': 'test', 'password': 'test'}
     }
 ]
 
