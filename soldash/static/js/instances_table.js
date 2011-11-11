@@ -115,7 +115,7 @@ function getSupportingPOSTData(command, host, element_id) {
     /**
      * Extract extra data to be sent in the POST request.
      */
-    var retval = 'host=' + host['hostname'] + '&port=' + host['port'] + '&core=' + host['index']; // CHANGE THESE?
+    var retval = 'host=' + host['hostname'] + '&port=' + host['port'] + '&core=' + host['core'];
     if(! $.isEmptyObject(host['auth'])) {
         retval += '&username=' + host['auth']['username'] + '&password=' + host['auth']['password'];
     }
@@ -134,7 +134,6 @@ function handleCommandResponse(command, data, status, host, element_id) {
      * host: same as in command_click()
      * element_id: same as in command_click() 
      */
-	console.log(data);
 	if(command === 'reload') {
 		if(D['solrResponseHeaders'][data['data']['responseHeader']['status']] === 'ok') {
 	    	changeIcon(element_id, 'success');
@@ -150,7 +149,7 @@ function handleCommandResponse(command, data, status, host, element_id) {
 	        displayFilelist(data, host);
 		} else {
 			changeIcon(element_id, 'error');
-	        setStatusBar(data['data']['message'], command, 'error', D['hide_status_msg_error']);
+	        setStatusBar(data['data']['status'], command, 'error', D['hide_status_msg_error']);
 		}
 	} else {
 	    if(data['status'].toLowerCase() === 'error') {
@@ -162,7 +161,7 @@ function handleCommandResponse(command, data, status, host, element_id) {
 	    } else if(data['data']['status'].toLowerCase() == 'ok') {
 	        changeIcon(element_id, 'success');
 	        setStatusBar('Success!', command, 'success', D['hide_status_msg_success']);
-	    } else if(data['data']['status'].toLowerCase() === 'no indexversion specified') {
+	    } else {
 	        changeIcon(element_id, 'error');
 	        setStatusBar(data['data']['status'], command, 'error', D['hide_status_msg_error']);
 	    }

@@ -1,0 +1,10 @@
+====================
+Soldash Changelog
+====================
+
+Version 0.1 - November 11th 2011
+----------------------------------------
+
+* Core functionality: overview of Solr instances, status, index version
+* Out-out-date index highlighting
+* Core actions: Fetch Index, Enable/Disable Polling and Replication, Get Filelist, Reload.
