@@ -1,65 +1,64 @@
 <h1>Soldash</h1>
 <% for(var i=0; i<data.length; i++) {%>
-	<% var core = data[i] %>
+    <% var core = data[i] %>
     <h3>
         <% if(core['core_name'] === null) { %>
-        	<% core['core_name'] = 'None'; %>
-        	Default Core
+            <% core['core_name'] = 'None'; %>
+            Default Core
         <% } else { %>
-        	<%= core['core_name'] %>
+            <%= core['core_name'] %>
         <% } %>
     </h3>
     
     <table class="instances" id="instances_<%= core['core_name'] %>">
-		<tr>
-			<th>Host</th>
-			<th>Status</th>
-			<th>Type</th>
-			<th>Version</th>
-			<th>Generation</th>
-			<% for(var i=0; i<commands.length; i++) { %>
-				<% if(commands[i].title) { %>
-					<th><%= commands[i].title %></th>
-				<% } %>
-			<% } %>
-		</tr>
-		<% for(var i=0; i<core.hosts.length; i++) { %>
-			<% var host = core.hosts[i]; %>
-			<% var row_id = [core['core_name'],host.hostname.replace(/\./g,'_'),host.port].join('-'); %>
-			<tr id="<%= row_id %>">
-				<td class="address">
-					<a href="http://<%= host.hostname %>:<%= host.port %>/solr/admin"><%= host.hostname %></a>
-				</td>
-				<% if(host.details) { %>
-					<% var det = host.details.details; %>
-					<% console.log(det); %>
-					<td class="status <%= solrResponseHeaders[host.details.responseHeader.status] %>">
-						<%= solrResponseHeaders[host.details.responseHeader.status] %>
-					</td>
-					<td class="type <% if(det.isMaster === 'true') { %> master <% } else { %> slave <% } %>">
-						<% if(det.isMaster === 'true') { %>
-							M
-						<% } else { %>
-							S
-						<% } %>
-					</td>
-					<td class="version fixed_width_font <% if(det.isSlave == 'true' && !upToDate(det)) { %> out_of_sync <% } %>"><%= det.indexVersion %></td>
-					<td class="generation"><%= det.generation %></td>
-					<% for(var j=0; j<commands.length; j++) { %>
-						<% var command = commands[j]; %>
-						<% if(commands[j].title) { %>
-							<% var element_id = [core['core_name'],host.hostname.replace(/\./g,'_'),host.port,command.command,command.reverse].join('-'); %>
-							<td class="<%= command.command %>">
-								<a href="#">
-									<div class="executebutton <%= getExecuteButtonClass(command.command, det) %>" id="<%= element_id %>"> </div>
-								</a>
-							</td>
-						<% } %>
-					<% } %>
-				<% } else { %>
-					<td class="status critical"><%=host.error%></td>
-				<% } %>
-			</tr>
-		<% } %>
-	</table>
+        <tr>
+            <th>Host</th>
+            <th>Status</th>
+            <th>Type</th>
+            <th>Version</th>
+            <th>Generation</th>
+            <% for(var i=0; i<commands.length; i++) { %>
+                <% if(commands[i].title) { %>
+                    <th><%= commands[i].title %></th>
+                <% } %>
+            <% } %>
+        </tr>
+        <% for(var i=0; i<core.hosts.length; i++) { %>
+            <% var host = core.hosts[i]; %>
+            <% var row_id = [core['core_name'],host.hostname.replace(/\./g,'_'),host.port].join('-'); %>
+            <tr id="<%= row_id %>">
+                <td class="address">
+                    <a href="http://<%= host.hostname %>:<%= host.port %>/solr/admin"><%= host.hostname %></a>
+                </td>
+                <% if(host.details) { %>
+                    <% var det = host.details.details; %>
+                    <td class="status <%= solrResponseHeaders[host.details.responseHeader.status] %>">
+                        <%= solrResponseHeaders[host.details.responseHeader.status] %>
+                    </td>
+                    <td class="type <% if(det.isMaster === 'true') { %> master <% } else { %> slave <% } %>">
+                        <% if(det.isMaster === 'true') { %>
+                            M
+                        <% } else { %>
+                            S
+                        <% } %>
+                    </td>
+                    <td class="version fixed_width_font <% if(det.isSlave == 'true' && !upToDate(det)) { %> out_of_sync <% } %>"><%= det.indexVersion %></td>
+                    <td class="generation"><%= det.generation %></td>
+                    <% for(var j=0; j<commands.length; j++) { %>
+                        <% var command = commands[j]; %>
+                        <% if(commands[j].title) { %>
+                            <% var element_id = [core['core_name'],host.hostname.replace(/\./g,'_'),host.port,command.command,command.reverse].join('-'); %>
+                            <td class="<%= command.command %>">
+                                <a href="#">
+                                    <div class="executebutton <%= getExecuteButtonClass(command.command, det) %>" id="<%= element_id %>"> </div>
+                                </a>
+                            </td>
+                        <% } %>
+                    <% } %>
+                <% } else { %>
+                    <td class="status critical"><%=host.error%></td>
+                <% } %>
+            </tr>
+        <% } %>
+    </table>
 <% } %>
