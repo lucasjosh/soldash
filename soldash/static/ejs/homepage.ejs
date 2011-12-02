@@ -30,7 +30,7 @@
 				<td class="address">
 					<a href="http://<%= host.hostname %>:<%= host.port %>/solr/admin"><%= host.hostname %></a>
 				</td>
-				<% if(host.details.details) { %>
+				<% if(host.details) { %>
 					<% var det = host.details.details; %>
 					<% console.log(det); %>
 					<td class="status <%= solrResponseHeaders[host.details.responseHeader.status] %>">
