@@ -37,7 +37,7 @@ def query_solr(host, command, core, params=None):
     if params:
         for key in params:
             url += '&%s=%s' % (key, params[key])
-    if host['auth']:
+    if host.get('auth', {}):
         passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
         passman.add_password(None, url, 
                              host['auth']['username'], 
