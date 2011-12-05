@@ -42,13 +42,13 @@ If HTTP authentication were required by the Solr instance in the last example, t
 ### CORES
 CORES is a list of the cores available on the Solr instances. At the moment, due to the primary requirements of this project, Soldash presumes that all Solr instances have the same cores.
 
-If you do not have a multi-core set up, INDEXES should be defined so:
+If you do not have a multi-core set up, CORES should be defined so:
 
-    INDEXES = [None]
+    CORES = [None]
 
-If you have a default index and two additional cores, INDEXES should be defined so:
+If you have a default index and two additional cores, CORES should be defined so:
 
-    INDEXES = [None, 'core1', 'core2']
+    CORES = [None, 'core1', 'core2']
 
 ### TIMEOUT
 TIMEOUT is the timeout (in seconds) for queries to a Solr client. It is best to keep this number relatively low as requests are (not yet) parallelized.
