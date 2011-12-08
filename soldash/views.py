@@ -1,14 +1,17 @@
 from flask import render_template, request, jsonify
 
 from soldash import app
-from soldash.helpers import get_details, query_solr
+from soldash.helpers import get_details, query_solr, get_solr_versions
 from soldash.settings import (RESPONSEHEADERS, COMMANDS, JS_REFRESH, 
                               DEBUG, HIDE_STATUS_MSG_SUCCESS, HIDE_STATUS_MSG_ERROR)
 
 @app.route('/')
 def homepage():
     cores = get_details()
-    return render_template('homepage.html', cores=cores)
+    solr_version = get_solr_version()
+    return render_template('homepage.html', 
+                           cores=cores, 
+                           solr_version=solr_version)
 
 @app.route('/execute/<command>', methods=['POST'])
 def execute(command):
@@ -33,6 +36,10 @@ def execute(command):
             'port': port,
             'auth': auth}
     return jsonify(query_solr(host, command, core, params=params))
+
+@app.route('/solr_versions', methods=['GET'])
+def solr_versions():
+    return jsonify({'data': get_solr_versions()})
 
 @app.route('/details', methods=['GET'])
 def details():

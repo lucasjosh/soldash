@@ -21,19 +21,31 @@ def get_details():
         retval.append(entry)
     return retval
 
-def query_solr(host, command, core, params=None):
+def get_solr_versions():
+    retval = {}
+    for host in HOSTS:
+        url = 'http://%s:%s/solr/admin/system?wt=json' %(host['hostname'],
+                                                         host['port'])
+        system_data = query_solr(host, None, None, url=url)
+        retval[host['hostname']] = system_data['lucene']['lucene-spec-version']
+    return retval
+    
+
+def query_solr(host, command, core, params=None, url=None):
     socket.setdefaulttimeout(TIMEOUT)
     if not core:
         core = DEFAULTCORENAME
-    if command == 'reload':
-        url = 'http://%s:%s/solr/admin/cores?action=RELOAD&wt=json&core=%s' % (host['hostname'], 
-                                                                               host['port'],
-                                                                               core)
-    else:
-        url = 'http://%s:%s/solr/%s/replication?command=%s&wt=json' % (host['hostname'], 
-                                                                       host['port'], 
-                                                                       core,
-                                                                       command)
+    
+    if not url:
+        if command == 'reload':
+            url = 'http://%s:%s/solr/admin/cores?action=RELOAD&wt=json&core=%s' % (host['hostname'], 
+                                                                                   host['port'],
+                                                                                   core)
+        else:
+            url = 'http://%s:%s/solr/%s/replication?command=%s&wt=json' % (host['hostname'], 
+                                                                           host['port'], 
+                                                                           core,
+                                                                           command)
     if params:
         for key in params:
             url += '&%s=%s' % (key, params[key])
