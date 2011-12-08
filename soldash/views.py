@@ -45,7 +45,7 @@ def solr_versions():
 def details():
     retval = get_details()
     return jsonify({'data': retval,
-                    'solrResponseHeaders': RESPONSEHEADERS,
+                    'solr_response_headers': RESPONSEHEADERS,
                     'commands': COMMANDS,
                     'js_refresh': JS_REFRESH,
                     'debug': str(DEBUG).lower(),

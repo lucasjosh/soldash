@@ -41,7 +41,7 @@ function update(async) {
         async: async,
         success: function(data, status, jqXHR){
             D = {'debug': data['debug'], 'refresh': data['js_refresh'], 
-                 'solrResponseHeaders': data['solrResponseHeaders'], 
+                 'solr_response_headers': data['solr_response_headers'], 
                  'hide_status_msg_success': data['hide_status_msg_success'],
                  'hide_status_msg_error': data['hide_status_msg_success']};
             D['data'] = data['data']; // global variable of data
@@ -152,7 +152,7 @@ function handleCommandResponse(command, data, status, host, element_id) {
      * element_id: same as in command_click() 
      */
 	if(command === 'reload') {
-		if(D['solrResponseHeaders'][data['data']['responseHeader']['status']] === 'ok') {
+		if(D['solr_response_headers'][data['data']['responseHeader']['status']] === 'ok') {
 	    	changeIcon(element_id, 'success');
 	        setStatusBar('Success!', command, 'success', D['hide_status_msg_success']);
 		} else {
