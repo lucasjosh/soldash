@@ -3,7 +3,21 @@ function initialise() {
      * Called upon page load.
      */
     update(false);
+    setSolrVersions();
     toggleRefresh(true);
+    render();
+}
+
+function getSolrVersions() {
+    $.ajax({
+        url: '/solr_versions',
+        type: 'GET',
+        data: '',
+        async: false,
+        success: function(data, status, jqXHR){
+            D['solr_versions'] = data['data']; // global variable of data
+        }
+    });
 }
 
 function toggleRefresh(on) {
@@ -31,13 +45,16 @@ function update(async) {
                  'hide_status_msg_success': data['hide_status_msg_success'],
                  'hide_status_msg_error': data['hide_status_msg_success']};
             D['data'] = data['data']; // global variable of data
-            EJS.config({cache: "false" === D['debug']});
-            var container = $('#EJS_container');
-            var result = new EJS({'url': '/static/ejs/homepage.ejs'}).render(data);
-            container.html(result);
-            setupClickHandlers();
         }
     });
+}
+
+function render() {
+    EJS.config({cache: "false" === D['debug']});
+    var container = $('#EJS_container');
+    var result = new EJS({'url': '/static/ejs/homepage.ejs'}).render(D['data']);
+    container.html(result);
+    setupClickHandlers();
 }
 
 function setupClickHandlers() {
