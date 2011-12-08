@@ -15,7 +15,7 @@ function getSolrVersions() {
         data: '',
         async: false,
         success: function(data, status, jqXHR){
-            D['data']['solr_versions'] = data['data'];
+            D['solr_versions'] = data['data'];
         }
     });
 }
@@ -45,7 +45,10 @@ function update(async) {
                  'solr_response_headers': data['solr_response_headers'], 
                  'hide_status_msg_success': data['hide_status_msg_success'],
                  'hide_status_msg_error': data['hide_status_msg_success']};
-            D['data'] = data['data']; 
+            D['data'] = data['data'];
+            if(D['solr_versions']) {
+                D['data']['solr_versions'] = D['solr_versions'];
+            }
         }
     });
 }
