@@ -27,7 +27,10 @@ def get_solr_versions():
         url = 'http://%s:%s/solr/admin/system?wt=json' %(host['hostname'],
                                                          host['port'])
         system_data = query_solr(host, None, None, url=url)
-        retval[host['hostname']] = system_data['lucene']['lucene-spec-version']
+        if system_data['status'] == 'ok':
+            retval[host['hostname']] = system_data['data']['lucene']['lucene-spec-version']
+        else:
+            retval[host['hostname']] = None
     return retval
     
 
