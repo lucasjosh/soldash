@@ -15,7 +15,7 @@ function getSolrVersions() {
         data: '',
         async: false,
         success: function(data, status, jqXHR){
-            D['solr_versions'] = data['data'];
+            D['data']['solr_versions'] = data['data'];
         }
     });
 }
