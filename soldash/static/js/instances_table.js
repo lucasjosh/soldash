@@ -247,8 +247,12 @@ function changeIcon(element_id, new_icon) {
      * element_id: id of the element that was clicked to trigger this function 
      * new_icon: a css class to be added to change the icon
      */
-    $('#' + element_id).removeClass('ready success error working');
-    $('#' + element_id).addClass(new_icon);
+    var element = $('#' + element_id);
+    if(!(element.hasClass('enabled') || element.hasClass('disabled')) 
+       && new_icon !== 'error') { 
+        element.removeClass('ready success error working');
+        element.addClass(new_icon);
+    }
 }
 
 function upToDate(det) {
