@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 HOSTS = [
     {
         'hostname': '33.33.33.11',

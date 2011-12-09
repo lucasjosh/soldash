@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 from flask import Flask
 
 __author__ = 'Aengus Walton'
