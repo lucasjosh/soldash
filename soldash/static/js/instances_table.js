@@ -16,7 +16,6 @@ function setSolrVersions() {
         async: false,
         success: function(data, status, jqXHR){
             D['solr_versions'] = data['data'];
-            D['data']['solr_versions'] = data['data'];
         }
     });
 }
@@ -48,9 +47,6 @@ function update(async) {
                  'hide_status_msg_error': data['hide_status_msg_success'],
                  'commands': data['commands']};
             D['data'] = data['data'];
-            if(D['solr_versions']) {
-                D['data']['solr_versions'] = D['solr_versions'];
-            }
         }
     });
 }
