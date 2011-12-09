@@ -41,11 +41,13 @@ function update(async) {
         async: async,
         success: function(data, status, jqXHR){
             // global variable of data:
-            D = {'debug': data['debug'], 'refresh': data['js_refresh'], 
-                 'solr_response_headers': data['solr_response_headers'], 
-                 'hide_status_msg_success': data['hide_status_msg_success'],
-                 'hide_status_msg_error': data['hide_status_msg_success'],
-                 'commands': data['commands']};
+            if(typeof D === 'undefined') {
+                D = {'debug': data['debug'], 'refresh': data['js_refresh'], 
+                     'solr_response_headers': data['solr_response_headers'], 
+                    'hide_status_msg_success': data['hide_status_msg_success'],
+                    'hide_status_msg_error': data['hide_status_msg_success'],
+                    'commands': data['commands']};
+            }
             D['data'] = data['data'];
         }
     });
