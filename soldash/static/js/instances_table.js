@@ -8,7 +8,7 @@ function initialise() {
     render();
 }
 
-function getSolrVersions() {
+function setSolrVersions() {
     $.ajax({
         url: '/solr_versions',
         type: 'GET',
