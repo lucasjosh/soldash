@@ -8,10 +8,7 @@ from soldash.settings import (RESPONSEHEADERS, COMMANDS, JS_REFRESH,
 @app.route('/')
 def homepage():
     cores = get_details()
-    solr_version = get_solr_version()
-    return render_template('homepage.html', 
-                           cores=cores, 
-                           solr_version=solr_version)
+    return render_template('homepage.html', cores=cores)
 
 @app.route('/execute/<command>', methods=['POST'])
 def execute(command):
