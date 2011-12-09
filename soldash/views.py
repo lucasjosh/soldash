@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from flask import render_template, request, jsonify
 
 from soldash import app

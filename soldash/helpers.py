@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import copy
 import urllib2
 import simplejson

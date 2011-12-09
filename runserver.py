@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from soldash import app
 from soldash.settings import DEBUG
 
