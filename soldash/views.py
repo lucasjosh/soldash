@@ -9,11 +9,19 @@ from soldash.settings import (RESPONSEHEADERS, COMMANDS, JS_REFRESH,
 
 @app.route('/')
 def homepage():
+    ''' Render and return the main homepage HTML. 
+        
+    This HTML will then be populated by javascript and EJS.
+    '''
     cores = get_details()
     return render_template('homepage.html', cores=cores)
 
 @app.route('/execute/<command>', methods=['POST'])
 def execute(command):
+    ''' Execute a command (one of soldash.settings.COMMANDS).
+    
+    Returns the output in JSON form.
+    '''
     hostname = request.form['host']
     port = request.form['port']
     
@@ -38,10 +46,20 @@ def execute(command):
 
 @app.route('/solr_versions', methods=['GET'])
 def solr_versions():
+    ''' Get the versions of all Solr daemons configured in 
+    soldash.settings.HOSTS.
+    
+    Returns the output in JSON form.
+    '''
+    
     return jsonify({'data': get_solr_versions()})
 
 @app.route('/details', methods=['GET'])
 def details():
+    ''' Get details about the current state of all Solr instances.
+    
+    Returns the output in JSON form.
+    '''
     retval = get_details()
     return jsonify({'data': retval,
                     'solr_response_headers': RESPONSEHEADERS,

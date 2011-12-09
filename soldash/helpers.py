@@ -9,6 +9,10 @@ from flask import jsonify
 from soldash.settings import HOSTS, CORES, TIMEOUT, DEFAULTCORENAME
 
 def get_details():
+    ''' Query Solr for information on each of the cores of 
+    each of the hosts.
+    '''
+    
     retval = []
     for core in CORES:
         entry = {'core_name': core, 
@@ -24,6 +28,12 @@ def get_details():
     return retval
 
 def get_solr_versions():
+    ''' Query each Solr host for system information.
+    
+    Strip out and return the Solr version, since it's all we're interested
+    in for the time being.
+    '''
+    
     retval = {}
     for host in HOSTS:
         url = 'http://%s:%s/solr/admin/system?wt=json' %(host['hostname'],
@@ -37,6 +47,14 @@ def get_solr_versions():
     
 
 def query_solr(host, command, core, params=None, url=None):
+    ''' Build a HTTP query to a Solr host and execute it. 
+    
+    host: host dictionary (see soldash.settings.HOSTS)
+    command: command to be performed (see soldash.settings.COMMANDS)
+    core: perform this command on a certain core (see soldash.settings.CORES)
+    params: extra parameters to pass in the URL.
+    url: if a non-empty string, use this string as the URL, instead of building one.
+    '''
     socket.setdefaulttimeout(TIMEOUT)
     if not core:
         core = DEFAULTCORENAME
