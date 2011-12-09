@@ -76,7 +76,6 @@ h3 {
 
 .executebutton {
     min-height: 22px;
-    max-width: 22px;
     margin: 0 auto;
 }
 .executebutton.enabled {
