@@ -26,7 +26,7 @@ function toggleRefresh(on) {
      * Turns on or off the automatic refresh of data on the page.
      */
     if(on === true) {
-        refreshHandler = setInterval('update()', D['refresh'] * 1000);
+        refreshHandler = setInterval('update(); render();', D['refresh'] * 1000);
     } else {
         clearInterval(refreshHandler);
     }
