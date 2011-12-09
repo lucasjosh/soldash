@@ -48,7 +48,7 @@ h3 {
     text-transform: uppercase;
     font-weight: bold;
 }
-.status, .type, .generation {
+.status, .type, .generation, .solr_version {
     text-align: center;
 }
 .critical {
