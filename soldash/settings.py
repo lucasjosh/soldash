@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 HOSTS = [
     {
         'hostname': '33.33.33.11',

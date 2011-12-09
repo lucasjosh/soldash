@@ -3,7 +3,22 @@ function initialise() {
      * Called upon page load.
      */
     update(false);
+    setSolrVersions();
     toggleRefresh(true);
+    render();
+}
+
+function setSolrVersions() {
+    $.ajax({
+        url: '/solr_versions',
+        type: 'GET',
+        data: '',
+        async: false,
+        success: function(data, status, jqXHR){
+            D['solr_versions'] = data['data'];
+            D['data']['solr_versions'] = data['data'];
+        }
+    });
 }
 
 function toggleRefresh(on) {
@@ -26,18 +41,26 @@ function update(async) {
         data: '',
         async: async,
         success: function(data, status, jqXHR){
+            // global variable of data:
             D = {'debug': data['debug'], 'refresh': data['js_refresh'], 
-                 'solrResponseHeaders': data['solrResponseHeaders'], 
+                 'solr_response_headers': data['solr_response_headers'], 
                  'hide_status_msg_success': data['hide_status_msg_success'],
-                 'hide_status_msg_error': data['hide_status_msg_success']};
-            D['data'] = data['data']; // global variable of data
-            EJS.config({cache: "false" === D['debug']});
-            var container = $('#EJS_container');
-            var result = new EJS({'url': '/static/ejs/homepage.ejs'}).render(data);
-            container.html(result);
-            setupClickHandlers();
+                 'hide_status_msg_error': data['hide_status_msg_success'],
+                 'commands': data['commands']};
+            D['data'] = data['data'];
+            if(D['solr_versions']) {
+                D['data']['solr_versions'] = D['solr_versions'];
+            }
         }
     });
+}
+
+function render() {
+    EJS.config({cache: "false" === D['debug']});
+    var container = $('#EJS_container');
+    var result = new EJS({'url': '/static/ejs/homepage.ejs'}).render(D);
+    container.html(result);
+    setupClickHandlers();
 }
 
 function setupClickHandlers() {
@@ -135,7 +158,7 @@ function handleCommandResponse(command, data, status, host, element_id) {
      * element_id: same as in command_click() 
      */
 	if(command === 'reload') {
-		if(D['solrResponseHeaders'][data['data']['responseHeader']['status']] === 'ok') {
+		if(D['solr_response_headers'][data['data']['responseHeader']['status']] === 'ok') {
 	    	changeIcon(element_id, 'success');
 	        setStatusBar('Success!', command, 'success', D['hide_status_msg_success']);
 		} else {

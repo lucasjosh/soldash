@@ -14,8 +14,9 @@
         <tr>
             <th>Host</th>
             <th>Status</th>
+            <th>Solr Version</th>
             <th>Type</th>
-            <th>Version</th>
+            <th>Index Version</th>
             <th>Generation</th>
             <% for(var i=0; i<commands.length; i++) { %>
                 <% if(commands[i].title) { %>
@@ -32,8 +33,11 @@
                 </td>
                 <% if(host.details) { %>
                     <% var det = host.details.details; %>
-                    <td class="status <%= solrResponseHeaders[host.details.responseHeader.status] %>">
-                        <%= solrResponseHeaders[host.details.responseHeader.status] %>
+                    <td class="status <%= solr_response_headers[host.details.responseHeader.status] %>">
+                        <%= solr_response_headers[host.details.responseHeader.status] %>
+                    </td>
+                    <td class="solr_version">
+                        <%= solr_versions[host.hostname] %>
                     </td>
                     <td class="type <% if(det.isMaster === 'true') { %> master <% } else { %> slave <% } %>">
                         <% if(det.isMaster === 'true') { %>
