@@ -81,9 +81,11 @@ h3 {
 }
 .executebutton.enabled {
     background-image: url("/static/images/enabled.png");
+    width: 72px;
 }
 .executebutton.disabled {
     background-image: url("/static/images/disabled.png");
+    width: 72px;
 }
 .executebutton.ready {
     background-image: url("/static/images/ready.png");
