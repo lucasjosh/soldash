@@ -273,7 +273,7 @@ function changeIcon(element_id, new_icon) {
        && new_icon !== 'error') { 
         element.removeClass('ready success error working');
         element.addClass(new_icon);
-    } else {
+    } else if(new_icon === 'success') {
         if(element.hasClass('enabled')) {
             element.removeClass('enabled');
             element.addClass('disabled');
