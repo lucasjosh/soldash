@@ -45,7 +45,8 @@ function update(async) {
             D = {'debug': data['debug'], 'refresh': data['js_refresh'], 
                  'solr_response_headers': data['solr_response_headers'], 
                  'hide_status_msg_success': data['hide_status_msg_success'],
-                 'hide_status_msg_error': data['hide_status_msg_success']};
+                 'hide_status_msg_error': data['hide_status_msg_success'],
+                 'commands': data['commands']};
             D['data'] = data['data'];
             if(D['solr_versions']) {
                 D['data']['solr_versions'] = D['solr_versions'];
@@ -57,7 +58,7 @@ function update(async) {
 function render() {
     EJS.config({cache: "false" === D['debug']});
     var container = $('#EJS_container');
-    var result = new EJS({'url': '/static/ejs/homepage.ejs'}).render(D['data']);
+    var result = new EJS({'url': '/static/ejs/homepage.ejs'}).render(D);
     container.html(result);
     setupClickHandlers();
 }
