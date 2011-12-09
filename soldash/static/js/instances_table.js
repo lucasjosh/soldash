@@ -155,38 +155,38 @@ function handleCommandResponse(command, data, status, host, element_id) {
      * host: same as in command_click()
      * element_id: same as in command_click() 
      */
-	if(command === 'reload') {
-		if(D['solr_response_headers'][data['data']['responseHeader']['status']] === 'ok') {
-	    	changeIcon(element_id, 'success');
-	        setStatusBar('Success!', command, 'success', D['hide_status_msg_success']);
-		} else {
-			changeIcon(element_id, 'error');
-	        setStatusBar(data['data'], command, 'error', D['hide_status_msg_error']);
-		}
-	} else if(command === 'filelist') {
-		if (data['data']['filelist']) {
-	        changeIcon(element_id, 'success');
-	        setStatusBar('Success!', command, 'success', D['hide_status_msg_success']);
-	        displayFilelist(data, host);
-		} else {
-			changeIcon(element_id, 'error');
-	        setStatusBar(data['data']['status'], command, 'error', D['hide_status_msg_error']);
-		}
-	} else {
-	    if(data['status'].toLowerCase() === 'error') {
-	        changeIcon(element_id, 'error');
-	        setStatusBar(data['data'], command, 'error', D['hide_status_msg_error']);
-	    } else if(data['data']['status'].toLowerCase() === 'error') {
-	        changeIcon(element_id, 'error');
-	        setStatusBar(data['data']['message'], command, 'error', D['hide_status_msg_error']);
-	    } else if(data['data']['status'].toLowerCase() == 'ok') {
-	        changeIcon(element_id, 'success');
-	        setStatusBar('Success!', command, 'success', D['hide_status_msg_success']);
-	    } else {
-	        changeIcon(element_id, 'error');
-	        setStatusBar(data['data']['status'], command, 'error', D['hide_status_msg_error']);
-	    }
-	}
+    if(command === 'reload') {
+        if(D['solr_response_headers'][data['data']['responseHeader']['status']] === 'ok') {
+            changeIcon(element_id, 'success');
+            setStatusBar('Success!', command, 'success', D['hide_status_msg_success']);
+        } else {
+            changeIcon(element_id, 'error');
+            setStatusBar(data['data'], command, 'error', D['hide_status_msg_error']);
+        }
+    } else if(command === 'filelist') {
+        if (data['data']['filelist']) {
+            changeIcon(element_id, 'success');
+            setStatusBar('Success!', command, 'success', D['hide_status_msg_success']);
+            displayFilelist(data, host);
+        } else {
+            changeIcon(element_id, 'error');
+            setStatusBar(data['data']['status'], command, 'error', D['hide_status_msg_error']);
+        }
+    } else {
+        if(data['status'].toLowerCase() === 'error') {
+            changeIcon(element_id, 'error');
+            setStatusBar(data['data'], command, 'error', D['hide_status_msg_error']);
+        } else if(data['data']['status'].toLowerCase() === 'error') {
+            changeIcon(element_id, 'error');
+            setStatusBar(data['data']['message'], command, 'error', D['hide_status_msg_error']);
+        } else if(data['data']['status'].toLowerCase() == 'ok') {
+            changeIcon(element_id, 'success');
+            setStatusBar('Success!', command, 'success', D['hide_status_msg_success']);
+        } else {
+            changeIcon(element_id, 'error');
+            setStatusBar(data['data']['status'], command, 'error', D['hide_status_msg_error']);
+        }
+    }
 }
 
 function displayFilelist(data, host) {
