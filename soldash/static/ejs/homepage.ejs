@@ -2,7 +2,7 @@
 <% for(var i=0; i<data.length; i++) {%>
     <% var core = data[i] %>
     <h3>
-        <% if(core['core_name'] === null) { %>
+        <% if(core['core_name'] === null || core['core_name'] === 'None') { %>
             <% core['core_name'] = 'None'; %>
             Default Core
         <% } else { %>
