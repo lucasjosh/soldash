@@ -128,6 +128,8 @@ function command_click(command, host, element_id) {
         data: data,
         success: function(data, status, jqXHR){
             handleCommandResponse(command, data, status, host, element_id);
+            update(false);
+            render();
         }
     });
 }
