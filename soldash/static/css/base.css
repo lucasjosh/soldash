@@ -21,6 +21,12 @@ body {
     color: #1b1d26;
 }
 
+#footer {
+    margin-top: 2em;
+    font-style: italic;
+    text-align: right;
+}
+
 a {
     color: #1b1d26;
 }
