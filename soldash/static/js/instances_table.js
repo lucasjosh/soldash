@@ -128,8 +128,6 @@ function command_click(command, host, element_id) {
         data: data,
         success: function(data, status, jqXHR){
             handleCommandResponse(command, data, status, host, element_id);
-            update(false);
-            render();
         }
     });
 }
@@ -283,6 +281,9 @@ function changeIcon(element_id, new_icon) {
             element.removeClass('disabled');
             element.addClass('enabled');
         }
+        
+        update(false);
+        render();
     }
 }
 
