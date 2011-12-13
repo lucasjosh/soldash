@@ -288,5 +288,9 @@ function changeIcon(element_id, new_icon) {
 }
 
 function upToDate(det) {
-    return det['slave']['masterDetails']['indexVersion'] == det['indexVersion'];
+    if('masterDetails' in det['slave']) {
+        return det['slave']['masterDetails']['indexVersion'] == det['indexVersion'];
+    } else {
+        return false;
+    }
 }
