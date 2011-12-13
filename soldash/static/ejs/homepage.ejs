@@ -24,8 +24,8 @@
                 <% } %>
             <% } %>
         </tr>
-        <% for(var i=0; i<core.hosts.length; i++) { %>
-            <% var host = core.hosts[i]; %>
+        <% for(var j=0; j<core.hosts.length; j++) { %>
+            <% var host = core.hosts[j]; %>
             <% var row_id = [core['core_name'],host.hostname.replace(/\./g,'_'),host.port].join('-'); %>
             <tr id="<%= row_id %>">
                 <td class="address">
