@@ -66,5 +66,6 @@ The same as the previous, only for an unsuccessful command execution.
 If enabled, the web application will be started in Flask's debug mode (allowing access to traceroutes, etc) and caching of the javascript templates will be disabled. 
 
 ### DEFAULTCORENAME
-This is the name of your default core in a single-core setup. You can set or find out what this is by editing your
-solr.xml file.
+This is the name of your default core in a single-core setup. You can find out what this is from your solr.xml file. 
+
+As it must be set, in a multi-core setup you can simply set it to any arbitrary core. 
