@@ -48,9 +48,9 @@
                     </td>
                     <td class="version fixed_width_font <% if(det.isSlave == 'true' && !upToDate(det)) { %> out_of_sync <% } %>"><%= det.indexVersion %></td>
                     <td class="generation"><%= det.generation %></td>
-                    <% for(var j=0; j<commands.length; j++) { %>
-                        <% var command = commands[j]; %>
-                        <% if(commands[j].title) { %>
+                    <% for(var k=0; k<commands.length; k++) { %>
+                        <% var command = commands[k]; %>
+                        <% if(commands[k].title) { %>
                             <% var element_id = [core['core_name'],host.hostname.replace(/\./g,'_'),host.port,command.command,command.reverse].join('-'); %>
                             <td class="<%= command.command %>">
                                 <a href="#">
