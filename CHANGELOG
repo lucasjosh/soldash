@@ -2,6 +2,10 @@
 Soldash Changelog
 ====================
 
+Version 0.2.1 - December 13th 2011
+----------------------------------------
+* Fixes for multicore setups
+
 Version 0.2 - December 12th 2011
 ----------------------------------------
 * Version of Solr daemon now displayed
