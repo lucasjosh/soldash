@@ -29,7 +29,7 @@
             <% var row_id = [core['core_name'],host.hostname.replace(/\./g,'_'),host.port].join('-'); %>
             <tr id="<%= row_id %>">
                 <td class="address">
-                    <a href="http://<%= host.hostname %>:<%= host.port %>/solr/admin"><%= host.hostname %></a>
+                <a href="http://<%= host.hostname %>:<%= host.port %>/solr<% if(core['core_name'] != 'None') { %>/<%= core['core_name'] %><% } %>/admin/"><%= host.hostname %></a>
                 </td>
                 <% if(host.details) { %>
                     <% var det = host.details.details; %>

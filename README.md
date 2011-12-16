@@ -16,6 +16,7 @@ It is still very young software and may contain bugs. Any feedback should be sen
 * Install the necessary dependencies:
     * pip install flask
     * pip install fabric
+    * pip install simplejson
 * Edit settings.py according to your Solr setup. More details are provided below.
 * Start the server:
     * python runserver.py
